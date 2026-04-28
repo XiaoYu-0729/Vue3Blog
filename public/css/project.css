@@ -1,0 +1,443 @@
+/* ========================================
+   📝 统一输入框样式（从 CreateArticle 借鉴）
+   ======================================== */
+
+/* 文本输入框 */
+.text-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(230, 180, 255, 0.4);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #b983ff;
+  box-shadow: 0 0 0 4px rgba(185, 131, 255, 0.15);
+}
+
+.text-input::placeholder {
+  color: #bbb;
+}
+
+/* 文本域输入框 */
+.textarea-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(230, 180, 255, 0.4);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.textarea-input:focus {
+  outline: none;
+  border-color: #b983ff;
+  box-shadow: 0 0 0 4px rgba(185, 131, 255, 0.15);
+}
+
+.textarea-input::placeholder {
+  color: #bbb;
+}
+
+/* 滚动条样式 - 粉紫色渐变 */
+.textarea-input::-webkit-scrollbar {
+  width: 6px;
+}
+
+.textarea-input::-webkit-scrollbar-track {
+  background: rgba(242, 217, 255, 0.5);
+  border-radius: 8px;
+}
+
+.textarea-input::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #ca9eff, #ffa2de);
+  border-radius: 8px;
+}
+
+.textarea-input::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b57cff, #ff85d0);
+}
+
+/* 日期输入框 */
+.date-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(230, 180, 255, 0.4);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #b983ff;
+  box-shadow: 0 0 0 4px rgba(185, 131, 255, 0.15);
+}
+
+/* ========================================
+   🖼️ 封面上传区域优化
+   ======================================== */
+
+.cover-upload {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  border: 2px dashed rgba(185, 131, 255, 0.5);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(240, 230, 255, 0.4), rgba(255, 240, 248, 0.4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.cover-upload:hover {
+  border-color: #b983ff;
+  background: linear-gradient(135deg, rgba(240, 230, 255, 0.6), rgba(255, 240, 248, 0.6));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(185, 131, 255, 0.2);
+}
+
+.upload-placeholder {
+  text-align: center;
+  color: #aa8fc4;
+  padding: 30px;
+}
+
+.upload-placeholder i {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+  color: #b983ff;
+}
+
+.upload-placeholder span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.upload-hint {
+  font-size: 0.9rem;
+  color: #c4a5da;
+}
+
+.cover-preview-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.cover-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cover-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.cover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+}
+
+.cover-upload:hover .cover-overlay {
+  opacity: 1;
+}
+
+.change-btn, .delete-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.change-btn {
+  color: #2e7d32;
+}
+
+.delete-btn {
+  color: #c62828;
+}
+
+.change-btn:hover {
+  background: rgba(185, 230, 185, 0.9);
+  transform: translateY(-2px);
+}
+
+.delete-btn:hover {
+  background: rgba(255, 200, 200, 0.9);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   📁 文件上传区域优化
+   ======================================== */
+
+.file-upload-area {
+  width: 100%;
+  min-height: 120px;
+  border: 2px dashed rgba(185, 131, 255, 0.5);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(240, 230, 255, 0.4), rgba(255, 240, 248, 0.4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.file-upload-area:hover {
+  border-color: #b983ff;
+  background: linear-gradient(135deg, rgba(240, 230, 255, 0.6), rgba(255, 240, 248, 0.6));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(185, 131, 255, 0.2);
+}
+
+.file-list-wrapper {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(185, 131, 255, 0.3);
+}
+
+.file-item i {
+  margin-right: 12px;
+  color: #b983ff;
+  font-size: 1.2rem;
+}
+
+.file-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #555;
+}
+
+.file-remove-btn {
+  background: none;
+  border: none;
+  color: #c62828;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.file-remove-btn:hover {
+  background: rgba(255, 200, 200, 0.3);
+}
+
+/* ========================================
+   🏷️ 状态标签优化
+   ======================================== */
+
+.status-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.status-tag {
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(230, 180, 255, 0.4);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #7c4caf;
+}
+
+.status-tag:hover {
+  border-color: #b983ff;
+  background: rgba(240, 230, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.status-tag.active {
+  background: linear-gradient(135deg, #b983ff, #ff9cef);
+  color: white;
+  border-color: #b983ff;
+  box-shadow: 0 4px 12px rgba(185, 131, 255, 0.4);
+}
+
+.status-tag i {
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   📅 时间范围选择优化
+   ======================================== */
+
+.time-range {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.time-input-group {
+  flex: 1;
+  min-width: 150px;
+}
+
+.time-label {
+  display: block;
+  margin-top: 8px;
+  padding-left: 4px;
+  color: #7c4caf;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.time-divider {
+  color: #aa8fc4;
+  font-weight: bold;
+  white-space: nowrap;
+  align-self: center;
+  font-size: 1.2rem;
+  min-width: 20px;
+  text-align: center;
+  padding-bottom: 2px;
+}
+
+/* ========================================
+   🏷️ 通用标签样式
+   ======================================== */
+
+.section-label {
+  display: block;
+  margin-bottom: 20px;
+  color: #7c4caf;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.required {
+  color: #e53935;
+  margin-right: 4px;
+}
+
+.hint-text {
+  display: block;
+  margin-top: 6px;
+  color: #aa8fc4;
+  font-size: 0.9rem;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  margin-top: 6px;
+  color: #aa8fc4;
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   📄 表单整体布局
+   ======================================== */
+
+.project-form {
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.form-section {
+  margin-bottom: 24px;
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .time-range {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .time-divider {
+    align-self: center;
+    margin: 8px 0;
+  }
+}
