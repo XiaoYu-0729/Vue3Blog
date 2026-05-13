@@ -33,7 +33,7 @@ export default {
   name: 'NavSelector',
   data() {
     return {
-      selectedPath: '/',
+      selectedPath: '',
       dropdownOpen: false,
       navItems: [
         { path: '/', label: '首页', icon: 'fas fa-home' },
@@ -55,9 +55,13 @@ export default {
       return this.currentItem.icon
     }
   },
-  created() {
-    // 初始化当前路由对应的选中值
-    this.selectedPath = this.$route.path
+  watch: {
+    $route: {
+      immediate: true,
+      handler(to) {
+        this.selectedPath = to.path
+      }
+    }
   },
   methods: {
     toggleDropdown() {

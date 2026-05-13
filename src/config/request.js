@@ -1,13 +1,9 @@
 import axios from 'axios';
 import router from '.';
-
-const TOKEN_KEY = 'auth_token';
-export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
-export const getToken = () => localStorage.getItem(TOKEN_KEY);
-export const removeToken = () => localStorage.removeItem(TOKEN_KEY);
+import { getToken, removeToken } from '@/config/tools';
 
 // 创建一个自定义的 axios 实例
-const request = axios.create({
+export const request = axios.create({
   baseURL: '/flask' // 基地址
 });
 
@@ -27,11 +23,15 @@ request.interceptors.response.use(
   response => response,
   error => {
     if (error.response) {
-      // 处理 401 Unauthorized 错误，可能是 token 无效或过期
-      if (error.response.status === 401) {
-        alert('认证失败，请重新登录。');
+      // 处理 422 Unprocessable Entity 错误，可能是 token 无效或过期
+      if (error.response.status === 422) {
         removeToken();
-        router.push('/login'); // 跳转到登录页
+        const confirmLogin = confirm('登录过期，请重新登录');
+        if(confirmLogin){
+          router.push('/login'); // 跳转到登录页
+        } else {
+          router.push('/');
+        }
       }
     }
     return Promise.reject(error);
@@ -60,9 +60,11 @@ export const uploadImage = async (file, source = 'default') => {
     const response = await request.post('/upload/image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
+      timeout: 5000,  // 5 秒超时
+      _skipAuth: false
     });
-    if(response.data && response.status === 200) {
+    if(response.data) {
       const url = response.data
       console.log('📤 响应数据:', response.data);
       return url;
@@ -73,17 +75,13 @@ export const uploadImage = async (file, source = 'default') => {
   } catch (error) {
     console.error('❌ 图片上传失败:', error);
     
-    // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
+    // 提取后端返回的错误信息（500 状态码时 jsonify(e) 的内容）
     let errorMsg = '图片上传失败';
-    if (error.response?.status === 400 && error.response?.data) {
-      // 后端出现错误返回 jsonify(e)，可能是字符串或对象
-      const backendError = typeof error.response.data === 'string' 
-        ? error.response.data 
-        : (error.response.data.error || error.response.data.message || JSON.stringify(error.response.data));
-      errorMsg = backendError;
+    if (error.response?.status === 500 && error.response?.data?.message) {
+      errorMsg = error.response.data.message;
     } else if (error.response?.status) {
       // 其他状态码错误
-      errorMsg = `上传失败：HTTP ${error.response.status}`;
+      errorMsg = `上传失败：HTTP ${error.response.status} ${error.response.statusText}`;
     } else if (error.message) {
       errorMsg = error.message;
     }
@@ -108,25 +106,10 @@ export const imageView = async (url) => {
   
   try {
     // 通过接口预览图片
-    const response = await request.get(`{url}`, {
-      responseType: 'blob' // 以 Blob 格式接收响应
+    const response = await request.get(url, {
+      responseType: 'blob', // 以 Blob 格式接收响应
+      _skipAuth: false
     });
-    
-    // 检查是否是错误响应（后端返回 400 时可能是 Blob 形式的 JSON）
-    const contentType = response.headers['content-type'];
-    if (contentType && contentType.includes('application/json')) {
-      // 响应是 JSON，说明可能是错误信息
-      const errorText = await response.data.text();
-      let errorMsg = '图片预览失败';
-      try {
-        const errorData = JSON.parse(errorText);
-        errorMsg = errorData.error || errorData.message || JSON.stringify(errorData);
-      } catch {
-        errorMsg = errorText || '图片预览失败';
-      }
-      alert(errorMsg);
-      throw new Error(errorMsg);
-    }
     
     // 创建 Blob URL
     const blob = new Blob([response.data], { type: response.headers['content-type'] || 'image/jpeg' });
@@ -146,7 +129,7 @@ export const imageView = async (url) => {
       console.error('❌ 图片预览失败:', error);
       
       let errorMsg = '图片预览失败';
-      if (error.response.status === 400 && error.response.data) {
+      if (error.response.status === 500 && error.response?.data?.message) {
         // 尝试解析 Blob 为文本
         if (error.response.data instanceof Blob) {
           try {
@@ -161,13 +144,10 @@ export const imageView = async (url) => {
             errorMsg = '图片预览失败';
           }
         } else {
-          const backendError = typeof error.response.data === 'string' 
-            ? error.response.data 
-            : (error.response.data.error || error.response.data.message || JSON.stringify(error.response.data));
-          errorMsg = backendError;
+          errorMsg = error.response.data.message;
         }
       } else if (error.response.status) {
-        errorMsg = `预览失败：HTTP ${error.response.status}`;
+        errorMsg = `预览失败：HTTP ${error.response.status} ${error.response.statusText}`;
       }
       
       alert(errorMsg);
@@ -224,7 +204,8 @@ export const uploadFiles = async (files, source = 'default') => {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
-      timeout: 30000  // 30 秒超时
+      timeout: 30000,  // 30 秒超时
+      _skipAuth: false
     });
     
     if (response.data && response.status === 200) {
@@ -240,15 +221,11 @@ export const uploadFiles = async (files, source = 'default') => {
     
     // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
     let errorMsg = '文件上传失败';
-    if (error.response?.status === 400 && error.response?.data) {
-      // 后端返回出现错误 jsonify(e)，可能是字符串或对象
-      const backendError = typeof error.response.data === 'string' 
-        ? error.response.data 
-        : (error.response.data.error || error.response.data.message || JSON.stringify(error.response.data));
-      errorMsg = backendError;
+    if ((error.response?.status === 400 || error.response?.status === 500) && error.response?.data?.message) {
+      errorMsg = error.response.data.message;
     } else if (error.response?.status) {
       // 其他状态码错误
-      errorMsg = `上传失败：HTTP ${error.response.status}`;
+      errorMsg = `上传失败：HTTP ${error.response.status} ${error.response.statusText}`;
     } else if (error.message) {
       errorMsg = error.message;
     }
@@ -275,8 +252,8 @@ export const fetchHomeData = async () => {
       timeout: 10000,  // 10 秒超时
       _skipAuth: true
     });
-    if (response.status === 200 && response.data) {
-      console.log('📤 首页数据获取成功:', response.data);
+    if (response.data) {
+      // console.log('📤 首页数据获取成功:', response.data);
       return response.data;
     } else {
       console.error('❌ 获取首页数据失败: 响应数据异常', response.data ? response.data : '');
@@ -287,15 +264,11 @@ export const fetchHomeData = async () => {
     
     // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
     let errorMsg = '获取首页数据失败';
-    if (error.response?.status === 400 && error.response?.data) {
-      // 后端返回出现错误 jsonify(e)，可能是字符串或对象
-      const backendError = typeof error.response.data === 'string' 
-        ? error.response.data 
-        : (error.response.data.error || error.response.data.message || JSON.stringify(error.response.data));
-      errorMsg = backendError;
+    if (error.response?.status === 500 && error.response?.data?.message) {
+      errorMsg = error.response.data.message;
     } else if (error.response?.status) {
       // 其他状态码错误
-      errorMsg = `获取首页数据失败：HTTP ${error.response.status}`;
+      errorMsg = `获取首页数据失败：HTTP ${error.response.status} ${error.response.statusText}`;
     } else if (error.message) {
       errorMsg = error.message;
     }
@@ -337,7 +310,7 @@ export const getDetailPage = async (id) =>{
       _skipAuth: true
     });
     
-    if (response.status === 200 && response.data) {
+    if (response.data && response.data.message === 'success') {
       console.log('📤 详情页数据获取成功:', response.data);
       return response.data;
     } else {
@@ -349,15 +322,11 @@ export const getDetailPage = async (id) =>{
     
     // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
     let errorMsg = '获取详情页数据失败';
-    if (error.response?.status === 400 && error.response?.data) {
-      // 后端返回出现错误 jsonify(e)，可能是字符串或对象
-      const backendError = typeof error.response.data === 'string' 
-        ? error.response.data 
-        : (error.response.data.error || error.response.data.message || JSON.stringify(error.response.data));
-      errorMsg = backendError;
+    if (error.response?.status && error.response?.data?.message) {
+      errorMsg = error.response.data.message;
     } else if (error.response?.status) {
       // 其他状态码错误
-      errorMsg = `获取详情页数据失败：HTTP ${error.response.status}`;
+      errorMsg = `获取详情页数据失败：HTTP ${error.response.status} ${error.response.statusText}`;
     } else if (error.message) {
       errorMsg = error.message;
     }
@@ -376,6 +345,5 @@ export default {
     contentLengthLimit,
     fetchHomeData,
     combineData,
-    getDetailPage,
-    request // 导出自定义的 axios 实例，供其他模块使用
+    getDetailPage
 };

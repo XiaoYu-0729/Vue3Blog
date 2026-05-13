@@ -168,7 +168,7 @@ const sendMessage = async () => {
   try{
     const response = await axios.post('/flask/agent/message', commit, {
       headers: { 'Content-Type': 'application/json' },
-      timeout: 60000
+      timeout: 60000 // 60 秒超时
     });
     if (response.data === undefined || response.data === '' || response.data === null) {
       throw new Error('后端返回了空响应');
@@ -179,7 +179,14 @@ const sendMessage = async () => {
     isThinking.value = false;
     scrollToBottom();
 } catch (error) {
-  console.error('消息发送失败:', error);
+  console.error('消息发送失败:', error.message);
+  if (error.response?.status) {
+    if (error.response.status === 500) {
+      console.error('后端返回的错误信息:', error.response.data.message || '未知错误');
+    } else {
+      console.error(`错误信息: HTTP ${error.response.status} ${error.response.statusText}`);
+    }
+  }
   messages.value.push({ role: 'assistant', content: '抱歉，消息发送失败，请稍后再试。' });
   isThinking.value = false;
 }

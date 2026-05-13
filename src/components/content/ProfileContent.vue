@@ -1,5 +1,10 @@
 <template>
   <div class="profile-content">
+    <!-- 编辑资料模态框 -->
+    <ProfileEditModal 
+      v-model:visible="showEditModal"
+    />
+
     <!-- 装饰背景 -->
     <div class="decorative-bg">
       <div class="decor-circle circle-1"></div>
@@ -9,26 +14,27 @@
     <!-- 用户信息头部 -->
     <div class="profile-header">
       <div class="avatar-wrapper">
-        <div class="avatar">
-          <span>雨</span>
-        </div>
-        <div class="avatar-ring"></div>
+        <img class="avatar" :src="userStore.userInfo.avatar ? `/flask${userStore.userInfo.avatar}` : 'image/默认头像.jpg'" alt="用户头像" @error="this.src='/image/默认头像.jpg'">
+        <!-- <div class="avatar-ring"></div> -->
       </div>
-      <h2>雨落筱然</h2>
+      <h2>{{ userStore.userInfo.nickname }}</h2>
+
+      <!-- 个人简介 -->
+       <p class="profile-bio">{{ userStore.userInfo.bio || '暂无个人简介' }}</p>
       
       <div class="profile-stats">
         <div class="stat-item">
-          <span class="stat-num">12</span>
+          <span class="stat-num">{{ userStore.userInfo.articleCount }}</span>
           <span class="stat-label">文章</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-num">8</span>
+          <span class="stat-num">{{ userStore.userInfo.projectCount }}</span>
           <span class="stat-label">项目</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-num">156</span>
+          <span class="stat-num">{{ userStore.userInfo.visitorCount }}</span>
           <span class="stat-label">访客</span>
         </div>
       </div>
@@ -83,8 +89,16 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/store/userStore.js';
+import ProfileEditModal from '../tools/ProfileEditModal.vue';
+import { removeToken } from '@/config/tools.js';
 
 const router = useRouter();
+
+const userStore = useUserStore();
+
+// 控制编辑模态框显示
+const showEditModal = ref(false);
 
 // 版本号
 const version = ref('1.0.0');
@@ -99,18 +113,18 @@ const menuSections = reactive([
   },
   {
     items: [
-      { id: 3, icon: 'fas fa-star', label: '我的收藏', gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)', action: 'collections' },
-      { id: 4, icon: 'fas fa-heart', label: '我的点赞', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)', action: 'likes' },
-      { id: 5, icon: 'fas fa-file-alt', label: '草稿箱', gradient: 'linear-gradient(135deg, #667eea, #764ba2)', action: 'drafts' },
-      { id: 6, icon: 'fas fa-history', label: '浏览历史', gradient: 'linear-gradient(135deg, #a18cd1, #fbc2eb)', action: 'history' },
-      { id:7, icon: 'fas fa-download', label: '下载管理', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'downloads' }
+      { id: 3, icon: 'fas fa-book-open', label: '我的文章', gradient: 'linear-gradient(135deg, #fa709a, #fee140)', action: 'articles' },
+      { id: 4, icon: 'fas fa-cubes', label: '我的项目', gradient: 'linear-gradient(135deg, #30cfd0, #330867)', action: 'projects' },
+      { id: 5, icon: 'fas fa-heart', label: '我的点赞', gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)', action: 'likes' },
+      { id: 6, icon: 'fas fa-star', label: '我的收藏', gradient: 'linear-gradient(135deg, #a18cd1, #fbc2eb)', action: 'collections' },
+      { id: 7, icon: 'fas fa-history', label: '浏览历史', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'history' },
     ]
   },
   {
     items: [
-      { id: 8, icon: 'fas fa-palette', label: '主题设置', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)', action: 'theme' },
-      { id: 9, icon: 'fas fa-user-cog', label: '账号设置', gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)', action: 'account' },
-      { id: 10, icon: 'fas fa-bell', label: '通知设置', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)', action: 'notifications' },
+      { id: 8, icon: 'fas fa-user', label: '编辑个人资料', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'account' },
+      { id: 9, icon: 'fas fa-bell', label: '通知设置', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)', action: 'notifications' },
+      { id: 10, icon: 'fas fa-download', label: '下载管理', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'downloads' },
       { id: 11, icon: 'fas fa-shield-alt', label: '隐私与安全', gradient: 'linear-gradient(135deg, #667eea, #764ba2)', action: 'privacy' }
     ]
   }
@@ -124,14 +138,23 @@ const totalMenuItems = computed(() => {
 // 方法：处理菜单点击
 const handleMenuClick = (action) => {
   console.log('点击了:', action);
-  
+
   // 根据action进行路由跳转
   switch (action) {
     case 'article':
       router.push('/create-article');
       break;
+    case 'articles':
+      router.push('/my-articles');
+      break;
     case 'project':
       router.push('/create-project');
+      break;
+    case 'projects':
+      router.push('/my-projects');
+      break;
+    case 'account':
+      showEditModal.value = true;
       break;
     default:
       console.log('暂未实现该功能');
@@ -144,6 +167,12 @@ const handleLogout = () => {
   // 可添加确认弹窗和处理逻辑
   if (confirm('确定要退出登录吗？')) {
     // 执行退出逻辑
+    removeToken();
+    userStore.clearUserState();
+    router.push('/');
+  } else {
+    // 取消操作
+    return;
   }
 };
 </script>

@@ -45,14 +45,36 @@
           class="content-card"
           @click="goToDetail(item.id)"
         >
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.intro }}</p>
-          <div class="card-meta">
-            <span class="type-badge" :class="item.type">
+          <!-- 封面图 -->
+          <div class="card-cover">
+            <img v-if="item.coverName" :src="`/flask${item.coverName}`" alt="封面"/>
+            <div v-else class="cover-placeholder">
               <i :class="item.type === 'article' ? 'fas fa-file-alt' : 'fas fa-project-diagram'"></i>
-              {{ item.type === 'article' ? '文章' : '项目' }}
-            </span>
-            <span class="date"><i class="far fa-calendar-alt"></i> {{ item.createTime }}</span>
+            </div>
+          </div>
+          <!-- 内容区域 -->
+          <div class="card-body">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.intro }}</p>
+            <div class="card-meta">
+              <div class="meta-left">
+                <span class="type-badge" :class="item.type">
+                  <i :class="item.type === 'article' ? 'fas fa-file-alt' : 'fas fa-project-diagram'"></i>
+                  {{ item.type === 'article' ? '文章' : '项目' }}
+                </span>
+                <span class="date"><i class="far fa-calendar-alt"></i> {{ item.createTime }}</span>
+              </div>
+              <div class="meta-stats">
+                <span class="stat-item">
+                  <i class="far fa-eye"></i>
+                  {{ item.views || 0 }}
+                </span>
+                <span class="stat-item">
+                  <i class="far fa-heart"></i>
+                  {{ item.likes || 0 }}
+                </span>
+              </div>
+            </div>
           </div>
         </article>
       </transition-group>
@@ -72,7 +94,8 @@ import { shuffleArray } from '@/config/tools';
 
 const router = useRouter();
 
-// 选项卡定义
+// 选项卡定义const hintText = ref('当前显示：全部');
+
 const tabs = [
   { label: '全部', value: 'all', icon: 'fas fa-layer-group' },
   { label: '文章', value: 'article', icon: 'fas fa-file-alt' },

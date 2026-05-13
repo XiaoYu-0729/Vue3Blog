@@ -166,6 +166,7 @@ import MarkdownVditor from '../tools/MarkdownVditor.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { uploadImage, uploadFiles, revokeImageUrl, 
   imageView, contentLengthLimit, request } from '@/config/request.js';
+import { useUserStore } from '@/store/userStore.js';
 
 // ============================================================
 //  事件
@@ -187,6 +188,8 @@ const projectStatus = ref(null);
 const startDate = ref('');
 const endDate = ref('');
 const isParentReady = ref(false);
+
+const userStore = useUserStore();
 
 const load = async () => {
   // 模拟异步加载（数据请求、图片加载等）
@@ -385,6 +388,7 @@ const publishProject = async () => {
     coverName:   coverName.value,
     files:       fileUrls, // 使用上传后的文件 URL
     createTime:  new Date().toISOString(),
+    user_id: userStore.userInfo.id
   };
 
   console.log('发布项目:', projectData);
@@ -399,7 +403,7 @@ const publishProject = async () => {
 
     console.log('后端响应:', response.data);
 
-    if (response.data && response.status === 200 && response.data === 'success') {
+    if (response.data && response.data.message === 'success') {
       console.log('✅ 项目已成功保存到数据库');
       alert('项目发布成功！');
       router.push('/');
@@ -413,20 +417,16 @@ const publishProject = async () => {
     
     // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
     let errorMsg = '发布失败';
-    if (error.response?.status === 400 && error.response?.data) {
-      // 后端出现错误返回 jsonify(e)，可能是字符串或对象
-      const backendError = typeof error.response.data === 'string' 
-        ? error.response.data 
-        : (error.response.data.error || error.response.data.message || JSON.stringify(error.response.data));
-      errorMsg = backendError;
+    if (error.response?.status === 500 && error.response?.data?.message) {
+      errorMsg = error.response.data.message;
     } else if (error.response?.status) {
       // 其他状态码错误
-      errorMsg = `发布失败：HTTP ${error.response.status}`;
+      errorMsg = `发布失败：HTTP ${error.response.status} ${error.response.statusText}`;
     } else if (error.message) {
       errorMsg = error.message;
     }
     
-    alert(errorMsg);
+    alert(`发布失败：${errorMsg}`);
   }
 };
 

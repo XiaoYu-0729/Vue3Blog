@@ -1,21 +1,21 @@
 <template>
     <!-- 顶栏区域 -->
     <nav class="top-nav">
-        <router-link to="/" exact-active-class="active">
+        <RouterLink to="/" exact-active-class="active">
           <i class="fas fa-home"></i> 首页
-        </router-link>
-        <router-link to="/discover" exact-active-class="active">
+        </RouterLink>
+        <RouterLink to="/discover" exact-active-class="active">
           <i class="fas fa-compass"></i> 发现
-        </router-link>
-        <router-link to="/notification" exact-active-class="active">
+        </RouterLink>
+        <RouterLink to="/notification" exact-active-class="active">
           <i class="fas fa-bell"></i> 通知
-        </router-link>
-        <router-link to="/more" exact-active-class="active">
+        </RouterLink>
+        <RouterLink to="/more" exact-active-class="active">
           <i class="fas fa-ellipsis-h"></i> 更多
-        </router-link>
-        <router-link to="/profile" exact-active-class="active">
+        </RouterLink>
+        <RouterLink to="/profile" exact-active-class="active">
           <i class="fas fa-user"></i> 我的
-        </router-link>
+        </RouterLink>
     </nav>
 </template>
 <style scoped>

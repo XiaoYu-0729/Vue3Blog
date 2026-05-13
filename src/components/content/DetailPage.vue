@@ -9,21 +9,27 @@
           <i class="fas fa-arrow-left"></i>
           <span>返回</span>
         </button>
-        
-        <h1 class="detail-title">{{ contentData.title }}</h1>
-        <p class="detail-intro">{{ contentData.intro }}</p>
-        
+
         <!-- 元信息 -->
         <div class="detail-meta">
-          <span class="type-badge" :class="contentData.type">
-            <i :class="contentData.type === 'article' ? 'fas fa-file-alt' : 'fas fa-project-diagram'"></i>
-            {{ contentData.type === 'article' ? '文章' : '项目' }}
-          </span>
-          <span class="meta-date">
-            <i class="far fa-calendar-alt"></i>
-            {{ contentData.createTime }}
-          </span>
+          <div class="author-info">
+            <img class="author-avatar" :src="userData.avatar ? `/flask${userData.avatar}` : '/image/默认头像.jpg'" alt="用户头像">
+            <span class="author-name">{{ userData.nickname || '匿名用户' }}</span>
+          </div>
+          <div class="meta-right">
+            <span class="type-badge" :class="contentData.type">
+              <i :class="contentData.type === 'article' ? 'fas fa-file-alt' : 'fas fa-project-diagram'"></i>
+              {{ contentData.type === 'article' ? '文章' : '项目' }}
+            </span>
+            <span class="meta-date">
+              <i class="far fa-calendar-alt"></i>
+              {{ contentData.createTime }}
+            </span>
+          </div>
         </div>
+
+        <h1 class="detail-title">{{ contentData.title }}</h1>
+        <p class="detail-intro">{{ contentData.intro }}</p>
 
         <!-- 项目技术栈 -->
         <div v-if="contentData.type === 'project' && contentData.techStack" class="tech-stack">
@@ -161,23 +167,9 @@ import FilesList from '../tools/FilesList.vue';
 const router = useRouter();
 const commentsSection = ref(null);
 const props = defineProps(['id']);
-
-// 加载完成后填入数据
-onMounted(async () => {
-  try {
-    console.log('📡 开始加载详情页数据，ID:', props.id);
-    const reply = await getDetailPage(props.id);
-    
-    if (reply) {
-      contentData.value = reply;
-      console.log('✅ 详情页数据加载成功');
-    }
-  } catch (error) {
-    console.error('❌ 详情页数据加载失败:', error);
-    // getDetailPage 已经处理了 alert 提示，这里只需记录日志
-    // 可选：加载失败时跳转到首页或列表页
-    // router.push('/');
-  }
+const userData = ref({
+  nickname: undefined,
+  avatar: undefined
 });
 
 // 内容数据
@@ -213,6 +205,25 @@ Vue3 带来了全新的组合式 API，让代码组织更加灵活。配合 Vite
   createTime: '2024-06-01',
   type: 'project',
   techStack: ['Vue 3', 'Vite', 'TypeScript', 'Pinia', 'Vue Router']
+});
+
+// 加载完成后填入数据
+onMounted(async () => {
+  try {
+    console.log('📡 开始加载详情页数据，ID:', props.id);
+    const reply = await getDetailPage(props.id);
+    
+    if (reply) {
+      contentData.value = reply.data;
+      userData.value = reply.user || { nickname: '', avatar: '' };
+      console.log('✅ 详情页数据加载成功');
+    }
+  } catch (error) {
+    console.error('❌ 详情页数据加载失败:', error);
+    // getDetailPage 已经处理了 alert 提示，这里只需记录日志
+    // 可选：加载失败时跳转到首页或列表页
+    // router.push('/');
+  }
 });
 
 // 互动状态

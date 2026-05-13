@@ -1,14 +1,14 @@
 /* ===== 页面容器 ===== */
 .detail-page {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 24px;
+  padding: 20px 25px;
 }
 
 /* ===== 返回按钮（右上角） ===== */
 .back-btn {
   position: absolute;
-  top: 20px;
+  top: 15px;
   right: 20px;
   z-index: 10;
   display: inline-flex;
@@ -40,7 +40,7 @@
 .detail-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
-  border-radius: 32px;
+  border-radius: 25px;
   border: 1px solid rgba(230, 180, 255, 0.5);
   box-shadow: 0 8px 24px -8px rgba(150, 80, 200, 0.2);
   overflow: hidden;
@@ -48,7 +48,7 @@
 
 /* ===== 头部区域 ===== */
 .detail-header {
-  padding: 32px 40px 30px;
+  padding: 60px 35px 0px;
   background: linear-gradient(145deg, rgba(255, 233, 244, 0.6), rgba(236, 219, 252, 0.6));
   border-bottom: 1px solid rgba(200, 150, 255, 0.3);
 }
@@ -66,15 +66,46 @@
   font-size: 1.1rem;
   color: #6b4b8c;
   line-height: 1.6;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .detail-meta {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  margin: 10px 0;
+  padding: 8px 16px;
+  border-radius: 16px;
+  border: 2px solid rgba(201, 150, 255, 0.15);
+  background: linear-gradient(to right, rgba(255, 245, 250, 0.95), rgba(243, 232, 255, 0.95));
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(185, 131, 255, 0.4);
+}
+
+.author-name {
+  color: #7c5a9e;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.meta-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .type-badge {
@@ -112,9 +143,9 @@
 
 /* ===== 技术栈 ===== */
 .tech-stack {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 2px solid rgba(200, 150, 255, 0.3);
+  margin-top: 0px 15px 15px;
+  padding: 15px 0px;
+  /* border-top: 2px solid rgba(200, 150, 255, 0.3); */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -176,7 +207,7 @@
 .action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   padding: 5px 10px;
   background: rgba(255, 229, 251, 0.36);
   border: 1px solid rgba(200, 150, 255, 0.3);
@@ -216,7 +247,7 @@
 
 /* ===== 内容主体 ===== */
 .detail-body {
-  padding: 20px;
+  padding: 20px 25px;
 }
 
 .content-text {
@@ -271,6 +302,21 @@
   font-family: 'Fira Code', monospace;
   font-size: 0.9em;
   color: #8816b5;
+}
+
+.content-text :deep(pre) {
+  max-width: 100%;
+  overflow-x: auto;
+  background: rgba(185, 131, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.content-text :deep(pre code) {
+  background: transparent;
+  padding: 0;
+  color: #5a3d7a;
 }
 
 .content-text :deep(hr) {
@@ -496,7 +542,13 @@
 /* ===== 响应式适配 ===== */
 @media (max-width: 768px) {
   .detail-page {
-    padding: 16px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  .detail-card {
+    width: 100%;
+    border-radius: 15px;
   }
 
   .detail-header {

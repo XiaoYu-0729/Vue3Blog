@@ -22,7 +22,7 @@ export default defineConfig({
     // 代理配置，将 /api 的请求转发到 Flask 后端
     proxy: {
       '/flask': {
-        target: 'http://192.168.70.1:8000',  // Flask 后端地址
+        target: 'http://localhost:8000',  // Flask 后端地址
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/flask/, ''),
         configure: (proxy, options) => {

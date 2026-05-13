@@ -10,7 +10,6 @@ import Vditor from 'vditor';
 import 'vditor/dist/index.css';
 import { uploadImage, imageView } from '@/config/request.js';
 
-// 获取父组件传递的值
 const props = defineProps({
   modelValue: {
     type: String,
@@ -40,13 +39,9 @@ onMounted(() => {
         value: props.modelValue,
         placeholder: props.placeholder,
         mode: 'ir',
-        cdn: '/vditor',
-        locale: 'zh_CN',
-        // 代码块配置
         markdown: {
           codeBlockPreview: true
         },
-        // 自定义语言显示名称
         hljs: {
           style: 'github',
           langs: []
