@@ -91,7 +91,7 @@ import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/userStore.js';
 import ProfileEditModal from '../tools/ProfileEditModal.vue';
-import { removeToken } from '@/config/tools.js';
+import axios from 'axios';
 
 const router = useRouter();
 
@@ -162,14 +162,31 @@ const handleMenuClick = (action) => {
 }
 
 // 方法：处理退出登录
-const handleLogout = () => {
+const handleLogout = async() => {
   console.log('退出登录');
   // 可添加确认弹窗和处理逻辑
   if (confirm('确定要退出登录吗？')) {
     // 执行退出逻辑
-    removeToken();
-    userStore.clearUserState();
-    router.push('/');
+    try {
+      const response = await axios.post('/flask/login/logout');
+      if (response.data.message === 'success') {
+        userStore.clearUserState();
+        router.push('/');
+      } else {
+        throw new Error('退出登录失败')
+      }
+    } catch (error) {
+      let errorMessage = '退出登录失败';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status) {
+        errorMessage = error.response.statusText;
+      } else {
+        errorMessage = error.message;
+      }
+      console.error(`退出登录失败: ${errorMessage}`);
+      alert('退出登录失败');
+    }
   } else {
     // 取消操作
     return;

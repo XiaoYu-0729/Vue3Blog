@@ -162,10 +162,11 @@
 
 <script setup>
 import router from '@/config';
+import axios from 'axios';
 import MarkdownVditor from '../tools/MarkdownVditor.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { uploadImage, uploadFiles, revokeImageUrl, 
-  imageView, contentLengthLimit, request } from '@/config/request.js';
+  imageView, contentLengthLimit } from '@/config/request.js';
 import { useUserStore } from '@/store/userStore.js';
 
 // ============================================================
@@ -394,11 +395,10 @@ const publishProject = async () => {
   console.log('发布项目:', projectData);
 
   try {
-    const response = await request.post('/upload/project', projectData, {
+    const response = await axios.post('/flask/upload/project', projectData, {
       headers: {
         'Content-Type': 'application/json'
-      },
-      _skipAuth: false // 需要认证
+      }
     });
 
     console.log('后端响应:', response.data);

@@ -5,10 +5,10 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import Vditor from 'vditor';
 import 'vditor/dist/index.css';
-import { uploadImage, imageView } from '@/config/request.js';
+import { uploadImage } from '@/config/request.js';
 
 const props = defineProps({
   modelValue: {

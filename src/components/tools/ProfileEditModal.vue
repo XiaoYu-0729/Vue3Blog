@@ -153,9 +153,9 @@
 <script setup>
 import { ref, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { uploadImage, request } from '@/config/request';
-import { removeToken } from '@/config/tools.js';
+import { uploadImage } from '@/config/request';
 import { useUserStore } from '@/store/userStore';
+import axios from 'axios';
 
 const props = defineProps({
   visible: {
@@ -258,7 +258,7 @@ const handleSubmit = async () => {
   try {
     let avatarUrl = formData.avatar || '';
 
-    // 如果有新头像文件，先上传到服务器
+    // 如果有新头像文件，先上传到服务器（优化：添加到“提交修改数据”的API调用中）
     if (avatarFile.value) {
       try {
         const uploadResult = await uploadImage(avatarFile.value, 'avatar');
@@ -282,8 +282,8 @@ const handleSubmit = async () => {
       nickname: formData.nickname,
       avatar: avatarUrl,
       bio: formData.bio,
-      email: formData.email,
-      phone: formData.phone
+      email: formData.email || null,
+      phone: formData.phone || null
     };
 
     // 添加密码字段
@@ -292,46 +292,46 @@ const handleSubmit = async () => {
       submitData.currentPassword = formData.currentPassword;
     }
 
+    isSubmitting.value = true;
+
     // 提交修改数据
     try {
-      const response = await request.put('/update/user', {
+      const response = await axios.put('/flask/update/user', submitData, {
         headers: {
           'Content-Type': 'application/json'
         },
-        data: submitData,
-        _skipAuth: false
+        credentials: 'include'
       });
       if (response?.data?.message === 'success') {
-        isSubmitting.value = true;
         // 如果更新了密码
         if (showPasswordSection.value) {
           alert('密码修改成功，请重新登录');
-          removeToken();
           userStore.clearUserState();
           router.push('/login');
+          return;
         } else {
           // 如果没有更新密码
           alert('更新成功');
         }
+        await userStore.fetchUserInfo();
+        handleClose();
       } else {
          throw new Error('更新失败，请重试');
       }
     } catch (error) {
       // 失败处理
-      let errorMessage = error.message || '更新失败，请重试';
+      let errorMessage = '更新失败，请重试';
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.response?.status) {
         errorMessage = error.response.statusText;
+      } else {
+        errorMessage = error.message;
       }
       alert(`更新失败：${errorMessage}`);
-      return;
     }
-
-    handleClose();
   } finally {
     isSubmitting.value = false;
-    window.location.reload();
   }
 };
 </script>

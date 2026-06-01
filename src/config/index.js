@@ -7,7 +7,6 @@ import NotificationContent from '../components/content/NotificationContent.vue'
 import CreateArticle from '../components/content/CreateArticle.vue'
 import CreateProject from '@/components/content/CreateProject.vue'
 import DetailPage from '@/components/content/DetailPage.vue'
-import { getToken, removeToken } from '@/config/tools'
 import { useUserStore } from '../store/userStore'
 
 const routes = [
@@ -70,14 +69,14 @@ const routes = [
     path: '/my-articles',
     name: 'my-articles',
     component: () => import('../components/tools/MyFiles.vue'),
-    props: { type: 'articles' },
+    props: { type: 'article' },
     meta: { requiresAuth: true }
   },
   {
     path: '/my-projects',
     name: 'my-projects',
     component: () => import('../components/tools/MyFiles.vue'),
-    props: { type: 'projects' },
+    props: { type: 'project' },
     meta: { requiresAuth: true }
   }
 ]
@@ -90,44 +89,31 @@ const router = createRouter({
   }
 })
 
-// 路由守卫，检查登录状态
+/** 路由守卫，检查登录状态
+ * 由于设置了httponly，前端无法直接访问cookie中的token，
+ * 需要调用API让后端检查token是否有效
+ */
 router.beforeEach(async (to, from, next) => {
-  const token = getToken();
   const userStore = useUserStore();
-  // 需要验证登录的路由
   if (to.meta.requiresAuth) {
-    // 检查 token 是否存在
-    if (!token || token === null) {
-      const confirmLogin = confirm('尚未登录，是否前往登录？');
-      if(confirmLogin){
-        return router.push('/login' );
-      } else {
-        return next(false);
-      }
+    if (userStore.isLoggedIn) {
+      next();
     } else {
-      // token 存在，检查用户信息是否存在状态管理
-      if (userStore.token && (userStore.userInfo === null || !userStore.userInfo)) {
-        try {
-          // 获取用户信息
-          await userStore.fetchUserInfo();
-        } catch (error) {
-          console.error("获取用户信息失败:", error.message);
+      await userStore.fetchUserInfo();
+      if (userStore.isLoggedIn) {
+        next();
+      } else {
+        const confirmLogin = confirm('尚未登录，是否前往登录？');
+        if (confirmLogin) {
+          next('/login');
+          return;
         }
-        // 经过获取登录状态失效(或获取失败异常)
-        if (!userStore.isLoggedIn) {
-          removeToken();
-          const confirmLogin = confirm('登录过期，请重新登录。');
-          if(confirmLogin){
-            return router.push('/login' );
-          } else {
-            return next(false);
-          }
-        }
-      } 
-    }
-  } 
-  // 不需要验证登录的路由
-  return next();
+        next(false);
+      }
+  }
+  } else {
+    next();
+  }
 })
 
 export default router;

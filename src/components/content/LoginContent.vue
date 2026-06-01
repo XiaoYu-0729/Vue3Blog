@@ -43,11 +43,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import {  isMobile, setToken, checkMobile } from '@/config/tools'
-import { request } from '@/config/request'
-import router from '@/config'
-import { useUserStore } from '@/store/userStore'
+import { ref, onMounted } from 'vue';
+import {  isMobile, checkMobile } from '@/config/tools';
+import router from '@/config';
+import { useUserStore } from '@/store/userStore';
+import axios from 'axios';
 
 const username = ref('')
 const password = ref('')
@@ -66,17 +66,15 @@ const handleLogin = async () => {
   }
   
   try {
-    const response = await request.post('/login', {
+    const response = await axios.post('/flask/login', {
       headers: {
         'Content-Type': 'application/json'
       },
       username: username.value,
-      password: password.value,
-      _skipAuth: true
+      password: password.value
     })
     
-    if (response?.data?.message === 'success' && response?.data?.token) {
-      setToken(response.data.token);
+    if (response?.data?.message === 'success' && response?.data?.userInfo) {
       userStore.setUserState(response.data);
       router.push('/')
     } else {

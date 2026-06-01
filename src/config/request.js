@@ -1,42 +1,4 @@
 import axios from 'axios';
-import router from '.';
-import { getToken, removeToken } from '@/config/tools';
-
-// 创建一个自定义的 axios 实例
-export const request = axios.create({
-  baseURL: '/flask' // 基地址
-});
-
-// 请求拦截器，自动添加Authorization头(不需要手动添加认证)
-request.interceptors.request.use(
-  config => {
-    const token = getToken();
-    if (token && !config.headers._skipAuth) { // 允许通过,通过_skipAuth标记跳过
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  }
-);
-
-// 响应拦截器，统一处理错误
-request.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response) {
-      // 处理 422 Unprocessable Entity 错误，可能是 token 无效或过期
-      if (error.response.status === 422) {
-        removeToken();
-        const confirmLogin = confirm('登录过期，请重新登录');
-        if(confirmLogin){
-          router.push('/login'); // 跳转到登录页
-        } else {
-          router.push('/');
-        }
-      }
-    }
-    return Promise.reject(error);
-  }
-);
 
 // 存储 Blob URL 及其对应的 blob 引用，用于后续释放内存
 const blobUrlMap = new Map();
@@ -57,12 +19,11 @@ export const uploadImage = async (file, source = 'default') => {
     
   try {
     // 上传图片
-    const response = await request.post('/upload/image', formData, {
+    const response = await axios.post('/flask/upload/image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
       timeout: 5000,  // 5 秒超时
-      _skipAuth: false
     });
     if(response.data) {
       const url = response.data
@@ -106,9 +67,8 @@ export const imageView = async (url) => {
   
   try {
     // 通过接口预览图片
-    const response = await request.get(url, {
+    const response = await axios.get(`/flask${url}`, {
       responseType: 'blob', // 以 Blob 格式接收响应
-      _skipAuth: false
     });
     
     // 创建 Blob URL
@@ -200,12 +160,11 @@ export const uploadFiles = async (files, source = 'default') => {
   try {
     console.log('📤 发送请求...');
     
-    const response = await request.post('/upload/files', formData, {
+    const response = await axios.post('/flask/upload/files', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
       timeout: 30000,  // 30 秒超时
-      _skipAuth: false
     });
     
     if (response.data && response.status === 200) {
@@ -248,9 +207,8 @@ export const contentLengthLimit = (content, maxLength = 100000) => {
 export const fetchHomeData = async () => {
   try {
     console.log('📡 开始获取首页数据...');
-    const response = await request.get('/data/home', {
+    const response = await axios.get('/flask/data/home', {
       timeout: 10000,  // 10 秒超时
-      _skipAuth: true
     });
     if (response.data) {
       // console.log('📤 首页数据获取成功:', response.data);
@@ -305,9 +263,8 @@ export const combineData = (articles, projects) => {
 export const getDetailPage = async (id) =>{
   try {
     console.log('📡 开始获取详情页数据，ID:', id);
-    const response = await request.get(`/data/detail/${id}`, {
+    const response = await axios.get(`/flask/data/detail/${id}`, {
       timeout: 10000,  // 10 秒超时
-      _skipAuth: true
     });
     
     if (response.data && response.data.message === 'success') {

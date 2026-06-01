@@ -178,18 +178,18 @@ const sendMessage = async () => {
     messages.value.push({ role: 'assistant', content: reply });
     isThinking.value = false;
     scrollToBottom();
-} catch (error) {
-  console.error('消息发送失败:', error.message);
-  if (error.response?.status) {
-    if (error.response.status === 500) {
-      console.error('后端返回的错误信息:', error.response.data.message || '未知错误');
-    } else {
-      console.error(`错误信息: HTTP ${error.response.status} ${error.response.statusText}`);
+  } catch (error) {
+    console.error('消息发送失败:', error.message);
+    if (error.response?.status) {
+      if (error.response.status === 500) {
+        console.error('后端返回的错误信息:', error.response.data.message || '未知错误');
+      } else {
+        console.error(`错误信息: HTTP ${error.response.status} ${error.response.statusText}`);
+      }
     }
+    messages.value.push({ role: 'assistant', content: '抱歉，消息发送失败，请稍后再试。' });
+    isThinking.value = false;
   }
-  messages.value.push({ role: 'assistant', content: '抱歉，消息发送失败，请稍后再试。' });
-  isThinking.value = false;
-}
 };
 
 const scrollToBottom = async () => {

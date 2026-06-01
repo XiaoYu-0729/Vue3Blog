@@ -67,11 +67,11 @@
               <div class="meta-stats">
                 <span class="stat-item">
                   <i class="far fa-eye"></i>
-                  {{ item.views || 0 }}
+                  {{ item.view }}
                 </span>
                 <span class="stat-item">
                   <i class="far fa-heart"></i>
-                  {{ item.likes || 0 }}
+                  {{ item.like }}
                 </span>
               </div>
             </div>

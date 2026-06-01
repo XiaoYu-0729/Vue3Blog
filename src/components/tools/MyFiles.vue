@@ -52,15 +52,15 @@
         class="file-item"
         @click="viewItem(item.id)"
       >
-        <div class="file-cover" v-if="item.cover">
-          <img :src="item.cover" :alt="config.coverAlt" />
+        <div class="file-cover" v-if="item.coverName">
+          <img :src="`/flask${item.coverName}`" :alt="config.coverAlt" />
         </div>
         <div class="file-cover placeholder" v-else>
           <i :class="config.placeholderIcon"></i>
         </div>
         <div class="file-content">
           <h3 class="file-title">{{ item.title }}</h3>
-          <p class="file-summary">{{ item.summary }}</p>
+          <p class="file-summary">{{ item.intro }}</p>
           <div class="file-meta">
             <div class="meta-left">
               <span class="meta-item date">
@@ -69,14 +69,14 @@
               </span>
               <span class="meta-item views">
                 <i class="far fa-eye"></i>
-                {{ item.views }}
+                {{ item.view }}
               </span>
               <span class="meta-item likes">
                 <i class="far fa-heart"></i>
-                {{ item.likes }}
+                {{ item.like }}
               </span>
-              <span class="status-badge" :class="item.status">
-                {{ item.status === 'published' ? '已发布' : '草稿' }}
+              <span class="status-badge" :class="item.draft ? 'draft' : 'published'">
+                {{ item.draft ? '草稿' : '已发布' }}
               </span>
             </div>
           </div>
@@ -98,10 +98,6 @@
         <i :class="config.emptyIcon"></i>
       </div>
       <p class="empty-text">{{ emptyText }}</p>
-      <button class="empty-action" @click="createItem">
-        <i class="fas fa-plus"></i>
-        {{ config.emptyButtonText }}
-      </button>
     </div>
 
     <!-- 分页 -->
@@ -128,7 +124,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { request } from '@/config/request';
+import axios from 'axios';
+import { useUserStore } from '@/store/userStore';
 
 const props = defineProps({
   type: {
@@ -139,35 +136,34 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const userStore = useUserStore();
 
 // 根据 type 获取配置
 const config = computed(() => {
   const configs = {
-    articles: {
+    article: {
       title: '我的文章',
       icon: 'fas fa-book-open',
       searchPlaceholder: '搜索文章标题...',
       createButtonText: '写文章',
       emptyIcon: 'fas fa-file-alt',
-      emptyButtonText: '写第一篇文章',
       coverAlt: '文章封面',
       placeholderIcon: 'fas fa-image',
-      apiEndpoint: '/my/articles',
+      apiEndpoint: '/data/my-articles',
       createRoute: '/create-article',
       editRoute: (id) => `/edit-article/${id}`,
       deleteEndpoint: (id) => `/article/${id}`,
       itemName: '文章'
     },
-    projects: {
+    project: {
       title: '我的项目',
       icon: 'fas fa-cubes',
       searchPlaceholder: '搜索项目名称...',
       createButtonText: '创建项目',
       emptyIcon: 'fas fa-cubes',
-      emptyButtonText: '创建第一个项目',
       coverAlt: '项目封面',
       placeholderIcon: 'fas fa-cube',
-      apiEndpoint: '/my/projects',
+      apiEndpoint: '/data/my-projects',
       createRoute: '/create-project',
       editRoute: (id) => `/edit-project/${id}`,
       deleteEndpoint: (id) => `/project/${id}`,
@@ -198,7 +194,11 @@ const filteredItems = computed(() => {
   
   // 状态筛选
   if (currentFilter.value !== 'all') {
-    result = result.filter(item => item.status === currentFilter.value);
+    result = result.filter(item => {
+      if (currentFilter.value === 'draft') return item.draft;
+      if (currentFilter.value === 'published') return !item.draft;
+      return true;
+    });
   }
   
   // 关键词搜索
@@ -231,7 +231,7 @@ const createItem = () => {
 };
 
 const viewItem = (id) => {
-  router.push({ name: 'detail', params: { id } });
+  router.push({ name: 'detail', params: { id: `${props.type}-${id}` } });
 };
 
 const editItem = (id) => {
@@ -254,85 +254,28 @@ const deleteItem = async (id) => {
 // 加载列表
 const loadItems = async () => {
   try {
-    const response = await request.get(config.value.apiEndpoint, {
-      params: {
-        page: currentPage.value,
-        pageSize: pageSize.value
-      }
+    const response = await axios.post('/flask/data/my-items', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      type: props.type,
+      userId: userStore.userInfo.id
     });
-    items.value = response.data.items || response.data.articles || response.data.projects || [];
+    items.value = response.data.items || [];
     totalCount.value = response.data.total || 0;
   } catch (error) {
     console.error(`加载${config.value.itemName}失败:`, error);
-    // 使用模拟数据
-    if (props.type === 'articles') {
-      items.value = [
-        {
-          id: 1,
-          title: 'Vue3 组合式 API 最佳实践',
-          summary: '深入探讨 Vue3 Composition API 的使用技巧和注意事项...',
-          cover: '',
-          createTime: '2025-05-10',
-          views: 128,
-          likes: 32,
-          status: 'published'
-        },
-        {
-          id: 2,
-          title: '前端性能优化指南',
-          summary: '从加载速度到运行效率，全面提升前端应用性能...',
-          cover: '',
-          createTime: '2025-05-08',
-          views: 86,
-          likes: 18,
-          status: 'published'
-        },
-        {
-          id: 3,
-          title: 'TypeScript 高级类型技巧',
-          summary: '掌握 TypeScript 的高级类型系统，写出更健壮的代码...',
-          cover: '',
-          createTime: '2025-05-05',
-          views: 0,
-          likes: 0,
-          status: 'draft'
-        }
-      ];
+    items.value = [];
+    totalCount.value = 0;
+    let errorMessage = '加载失败，请重试';
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.response?.status) {
+      errorMessage = error.response.statusText;
     } else {
-      items.value = [
-        {
-          id: 1,
-          title: '个人博客系统',
-          summary: '基于 Vue3 + Flask 的全栈博客项目，支持文章发布、项目管理等功能...',
-          cover: '',
-          createTime: '2025-05-10',
-          views: 256,
-          likes: 48,
-          status: 'published'
-        },
-        {
-          id: 2,
-          title: '任务管理工具',
-          summary: '一个简洁高效的任务管理应用，支持拖拽排序、标签分类等功能...',
-          cover: '',
-          createTime: '2025-05-08',
-          views: 128,
-          likes: 24,
-          status: 'published'
-        },
-        {
-          id: 3,
-          title: '在线代码编辑器',
-          summary: '支持多种编程语言的在线代码编辑器，具有语法高亮、自动补全等功能...',
-          cover: '',
-          createTime: '2025-05-05',
-          views: 0,
-          likes: 0,
-          status: 'draft'
-        }
-      ];
+      errorMessage = error.message;
     }
-    totalCount.value = 3;
+    alert(errorMessage);
   }
 };
 
