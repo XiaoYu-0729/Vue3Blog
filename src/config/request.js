@@ -50,6 +50,12 @@ request.interceptors.response.use(
       }catch(e) {
         console.error(e);
         if (e.response?.status === 401) {
+          // 调用退出API清除token
+          try {
+            await axios.post('/flask/login/logout', null, { withCredentials: true });
+          } catch (logoutError) {
+            console.error('退出登录失败:', logoutError);
+          }
           return Promise.reject(new Error('登录过期，请重新登录'));
         } else {
           return Promise.reject(e.message);
