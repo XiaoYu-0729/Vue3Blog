@@ -115,8 +115,7 @@ export const uploadImage = async (file, source = 'default') => {
     } else if (error.message) {
       errorMsg = error.message;
     }
-    
-    alert(errorMsg);
+
     throw error;
   }
 };
