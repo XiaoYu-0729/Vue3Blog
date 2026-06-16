@@ -180,7 +180,6 @@ const handleFileChange = async (event) => {
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
       console.error('封面上传失败:', error);
-      // uploadImage 和 imageView 内部已经有 alert 提示，这里不需要重复
     }
   }
 };
@@ -197,7 +196,6 @@ const handleDrop = async (event) => {
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
       console.error('封面上传失败:', error);
-      // uploadImage 和 imageView 内部已经有 alert 提示，这里不需要重复
     }
   }
 };
