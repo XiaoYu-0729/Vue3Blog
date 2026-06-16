@@ -1,4 +1,65 @@
 import axios from 'axios';
+import { getCookie } from './tools.js';
+
+// 配置 axios 实例（用于添加CSRF防护的token）
+export const request = axios.create({
+  baseURL: '/flask',
+  withCredentials: true,  // 非同域请求，所有该请求实例都携带
+  timeout: 30000,
+});
+
+// 添加请求拦截器，自动添加CSRF access token
+request.interceptors.request.use(
+  (config) => {
+    const methodsNeedCsrf = ['post', 'put', 'patch', 'delete'];
+    if (methodsNeedCsrf.includes(config.method.toLowerCase())) {
+      const csrfToken = getCookie('csrf_access_token');
+      if (csrfToken) {
+        config.headers['X-CSRF-TOKEN'] = csrfToken;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+/**
+ * 添加响应拦截器，处理access token过期问题
+ * 主要拦截响应特定错误，然后进行token失效后的刷新处理，并重试请求。
+ * 若还是失败调用请求会正常抛出并捕获错误然后显示
+ */
+request.interceptors.response.use(
+  (response) => response,
+  async(error) => {
+    // 保存原始请求配置
+    const originalRequest = error.config;
+    // 拦截所有的401令牌验证错误响应
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      // 尝试刷新一次token
+      try {
+        await axios.post('/flask/login/refresh', null, {
+          withCredentials: true,
+          headers: {
+            'X-CSRF-TOKEN': getCookie('csrf_refresh_token'),         // 需要携带 CSRF refresh token
+          },
+        });
+        return request(originalRequest);
+      }catch(e) {
+        console.error(e);
+        if (e.response?.status === 401) {
+          return Promise.reject(new Error('登录过期，请重新登录'));
+        } else {
+          return Promise.reject(e.message);
+        }
+      }
+    }
+    // 其他错误，直接返回
+    return Promise.reject(error);
+  }
+);
 
 // 存储 Blob URL 及其对应的 blob 引用，用于后续释放内存
 const blobUrlMap = new Map();
@@ -19,7 +80,7 @@ export const uploadImage = async (file, source = 'default') => {
     
   try {
     // 上传图片
-    const response = await axios.post('/flask/upload/image', formData, {
+    const response = await request.post('/upload/image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
@@ -67,7 +128,7 @@ export const imageView = async (url) => {
   
   try {
     // 通过接口预览图片
-    const response = await axios.get(`/flask${url}`, {
+    const response = await request.get(`${url}`, {
       responseType: 'blob', // 以 Blob 格式接收响应
     });
     
@@ -160,7 +221,7 @@ export const uploadFiles = async (files, source = 'default') => {
   try {
     console.log('📤 发送请求...');
     
-    const response = await axios.post('/flask/upload/files', formData, {
+    const response = await request.post('/upload/files', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
@@ -207,7 +268,7 @@ export const contentLengthLimit = (content, maxLength = 100000) => {
 export const fetchHomeData = async () => {
   try {
     console.log('📡 开始获取首页数据...');
-    const response = await axios.get('/flask/data/home', {
+    const response = await request.get('/data/home', {
       timeout: 10000,  // 10 秒超时
     });
     if (response.data) {
@@ -263,7 +324,7 @@ export const combineData = (articles, projects) => {
 export const getDetailPage = async (id) =>{
   try {
     console.log('📡 开始获取详情页数据，ID:', id);
-    const response = await axios.get(`/flask/data/detail/${id}`, {
+    const response = await request.get(`/data/detail/${id}`, {
       timeout: 10000,  // 10 秒超时
     });
     
@@ -293,6 +354,62 @@ export const getDetailPage = async (id) =>{
   }
 };
 
+// 详情页点赞功能
+export const likeDetailPage = async (id) => {
+  try {
+    console.log('📡 提交点赞请求，ID:', id);
+    const response = await request.post(`/update/${id}/like`, {
+      timeout: 10000,  // 10 秒超时
+    });
+    
+    if (response?.data && response?.data?.message === 'success') {
+      console.log('✅ 点赞成功');
+    } else {
+      throw new Error('响应数据异常，请联系管理员。');
+    }
+  }catch (error) {
+      console.error('❌ 点赞失败:', error);
+      let errorMessage = '操作失败, 请联系管理员';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status) {
+        errorMessage = error.response.statusText;
+      } else {
+        errorMessage = error.message;
+      }
+      alert(`点赞失败: ${errorMessage}`);
+      throw error;
+  }
+}
+
+// 详情页点赞取消功能
+export const cancelLikeDetailPage = async (id) => {
+  try {
+    console.log('📡 提交取消点赞请求，ID:', id);
+    const response = await request.delete(`/update/${id}/like`, {
+      timeout: 10000,  // 10 秒超时
+    });
+    
+    if (response?.data && response?.data?.message === 'success') {
+      console.log('✅ 取消点赞成功');
+    } else {
+      throw new Error('响应数据异常，请联系管理员。');
+    }
+  }catch (error) {
+      console.error('❌ 取消点赞失败:', error);
+      let errorMessage = '操作失败, 请联系管理员';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status) {
+        errorMessage = error.response.statusText;
+      } else {
+        errorMessage = error.message;
+      }
+      alert(`取消点赞失败: ${errorMessage}`);
+      throw error;
+  }
+}
+
 export default { 
     uploadImage, 
     imageView, 
@@ -302,5 +419,6 @@ export default {
     contentLengthLimit,
     fetchHomeData,
     combineData,
-    getDetailPage
+    getDetailPage,
+    likeDetailPage
 };

@@ -124,7 +124,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { request } from '@/config/request';
 import { useUserStore } from '@/store/userStore';
 
 const props = defineProps({
@@ -254,7 +254,7 @@ const deleteItem = async (id) => {
 // 加载列表
 const loadItems = async () => {
   try {
-    const response = await axios.post('/flask/data/my-items', {
+    const response = await request.post('/data/my-items', {
       headers: {
         'Content-Type': 'application/json'
       },

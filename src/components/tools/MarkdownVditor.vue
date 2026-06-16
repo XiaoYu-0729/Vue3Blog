@@ -139,14 +139,14 @@ watch(() => props.modelValue, (newVal) => {
 });
 
 // 暴露方法
-defineExpose({
-  getValue: () => vditor?.getValue() || '',
-  setValue: (value) => {
-    if (vditor) {
-      vditor.setValue(value);
-    }
-  }
-});
+// defineExpose({
+//   getValue: () => vditor?.getValue() || '',
+//   setValue: (value) => {
+//     if (vditor) {
+//       vditor.setValue(value);
+//     }
+//   }
+// });
 </script>
 
 <style>

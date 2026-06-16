@@ -99,21 +99,28 @@ router.beforeEach(async (to, from, next) => {
     if (userStore.isLoggedIn) {
       next();
     } else {
-      await userStore.fetchUserInfo();
-      if (userStore.isLoggedIn) {
-        next();
-      } else {
+      try {
+        // 通过调用获取用户信息的API在后端检查token是否有效/是否已登录
+        await userStore.fetchUserInfo();
+        if (userStore.isLoggedIn) {
+          next();
+        } else {
+          throw new Error('尚未登录');
+        }
+      } catch (e) {
+        userStore.clearUserState();
+        console.error(`获取用户信息失败: ${e.message}`)
         const confirmLogin = confirm('尚未登录，是否前往登录？');
         if (confirmLogin) {
           next('/login');
           return;
         }
-        next(false);
+        next('/');
       }
-  }
+    }
   } else {
     next();
   }
-})
+});
 
 export default router;

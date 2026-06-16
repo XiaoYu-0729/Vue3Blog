@@ -155,7 +155,7 @@ import { ref, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { uploadImage } from '@/config/request';
 import { useUserStore } from '@/store/userStore';
-import axios from 'axios';
+import { request } from '@/config/request';
 
 const props = defineProps({
   visible: {
@@ -296,7 +296,7 @@ const handleSubmit = async () => {
 
     // 提交修改数据
     try {
-      const response = await axios.put('/flask/update/user', submitData, {
+      const response = await request.put('/update/user', submitData, {
         headers: {
           'Content-Type': 'application/json'
         },

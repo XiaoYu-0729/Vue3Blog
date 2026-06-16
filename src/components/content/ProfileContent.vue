@@ -91,7 +91,7 @@ import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/userStore.js';
 import ProfileEditModal from '../tools/ProfileEditModal.vue';
-import axios from 'axios';
+import { request } from '@/config/request.js';
 
 const router = useRouter();
 
@@ -168,7 +168,7 @@ const handleLogout = async() => {
   if (confirm('确定要退出登录吗？')) {
     // 执行退出逻辑
     try {
-      const response = await axios.post('/flask/login/logout');
+      const response = await request.post('/login/logout');
       if (response.data.message === 'success') {
         userStore.clearUserState();
         router.push('/');

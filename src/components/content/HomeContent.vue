@@ -71,7 +71,7 @@
                 </span>
                 <span class="stat-item">
                   <i class="far fa-heart"></i>
-                  {{ item.like }}
+                  {{ item.like }}  
                 </span>
               </div>
             </div>

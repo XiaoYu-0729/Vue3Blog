@@ -162,7 +162,7 @@
 
 <script setup>
 import router from '@/config';
-import axios from 'axios';
+import { request } from '@/config/request.js';
 import MarkdownVditor from '../tools/MarkdownVditor.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { uploadImage, uploadFiles, revokeImageUrl, 
@@ -395,7 +395,7 @@ const publishProject = async () => {
   console.log('发布项目:', projectData);
 
   try {
-    const response = await axios.post('/flask/upload/project', projectData, {
+    const response = await request.post('/upload/project', projectData, {
       headers: {
         'Content-Type': 'application/json'
       }

@@ -47,7 +47,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios';
+import { request } from '@/config/request';
 import router from '@/config'
 
 const username = ref('')
@@ -69,7 +69,7 @@ const handleRegister = async () => {
 
   try {
     // 发送注册请求
-    const response = await axios.post('/flask/login/register', {
+    const response = await request.post('/login/register', {
       username: username.value,
       password: password.value,
       email: email.value || null,

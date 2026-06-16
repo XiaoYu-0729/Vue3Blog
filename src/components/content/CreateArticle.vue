@@ -110,7 +110,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import MarkdownVidtor from '../tools/MarkdownVditor.vue';
 import { uploadImage, revokeImageUrl, imageView, contentLengthLimit } from '@/config/request.js';
-import axios from 'axios';
+import { request } from '@/config/request.js';
 import router from '@/config';
 import { useUserStore } from '@/store/userStore.js';
 
@@ -258,7 +258,7 @@ const publishArticle = async () => {
   
   // 调用 api 发送给后端然后录入数据库
   try {
-    const response = await axios.post('/flask/upload/article', articleData, {
+    const response = await request.post('/upload/article', articleData, {
       headers: {
         'Content-Type': 'application/json'
       }

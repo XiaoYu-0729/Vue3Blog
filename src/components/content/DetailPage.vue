@@ -66,7 +66,7 @@
             :class="{ active: isCollected }"
             @click="toggleCollect"
           >
-            <i :class="isCollected ? 'fas fa-star' : 'far fa-star'"></i>
+            <i :class="isCollected ? 'fas fa-star' : 'far fa-star'"></i>  
             <span>{{ collectCount }}</span>
           </button>
           
@@ -159,9 +159,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import {useUserStore} from '@/store/userStore';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import { getDetailPage } from '@/config/request';
+import { getDetailPage, likeDetailPage, cancelLikeDetailPage } from '@/config/request';
 import FilesList from '../tools/FilesList.vue';
 
 const router = useRouter();
@@ -174,63 +175,24 @@ const userData = ref({
 
 // 内容数据
 const contentData = ref({
-  title: 'Vue3 + Vite 项目实战指南',
-  intro: '深入探索 Vue3 组合式 API 与 Vite 构建工具的最佳实践，打造现代化前端应用。',
-  content: `## 前言
-
-Vue3 带来了全新的组合式 API，让代码组织更加灵活。配合 Vite 的极速构建体验，开发效率大幅提升。
-
-## 核心特性
-
-### 1. 组合式 API
-- **setup 函数**：组件的逻辑入口
-- **响应式 API**：ref 和 reactive
-- **生命周期**：onMounted, onUpdated 等
-
-### 2. Vite 优势
-- ⚡ 极速冷启动
-- 🚀 快速 HMR
-- 📦 按需编译
-
-## 实践建议
-
-1. 合理使用 composables 封装复用逻辑
-2. 利用 TypeScript 提升类型安全
-3. 遵循 Vue3 最佳实践
-
-> 技术不断更新，保持学习才是王道！
-
----
-*最后更新：2024 年 6 月*`,
-  createTime: '2024-06-01',
-  type: 'project',
-  techStack: ['Vue 3', 'Vite', 'TypeScript', 'Pinia', 'Vue Router']
+  title: '',
+  intro: '',
+  content: '',
+  createTime: '',
+  type: '',
+  techStack: []
 });
 
-// 加载完成后填入数据
-onMounted(async () => {
-  try {
-    console.log('📡 开始加载详情页数据，ID:', props.id);
-    const reply = await getDetailPage(props.id);
-    
-    if (reply) {
-      contentData.value = reply.data;
-      userData.value = reply.user || { nickname: '', avatar: '' };
-      console.log('✅ 详情页数据加载成功');
-    }
-  } catch (error) {
-    console.error('❌ 详情页数据加载失败:', error);
-    // getDetailPage 已经处理了 alert 提示，这里只需记录日志
-    // 可选：加载失败时跳转到首页或列表页
-    // router.push('/');
-  }
-});
+const userStore = useUserStore();
 
 // 互动状态
 const isLiked = ref(false);
+const isLogin = ref(false);
 const isCollected = ref(false);
-const likeCount = ref(128);
-const collectCount = ref(45);
+const likeCount = ref(0);
+const collectCount = ref(0);
+// 当前详情类型
+const currentType = ref('');
 
 // 评论相关
 const newComment = ref('');
@@ -261,6 +223,35 @@ const comments = ref([
   }
 ]);
 
+// 加载完成后填入数据
+onMounted(async () => {
+  try {
+    // isLoading.value = true;
+    console.log('📡 开始加载详情页数据，ID:', props.id);
+    const reply = await getDetailPage(props.id);
+    
+    if (reply) {
+      contentData.value = reply.data;
+      userData.value = reply.user || { nickname: '', avatar: '' };
+      currentType.value = reply.data.type || 'article';
+      likeCount.value = reply.data.like_count || 0;
+      collectCount.value = reply.data.collect_count || 0;
+      isLogin.value = reply.isLogin || false;
+      isLiked.value = reply.isLike || false;
+      isCollected.value = reply.isCollected || false;
+      // 加载完成后，隐藏加载状态
+      // isLoading.value = false;
+      console.log('✅ 详情页数据加载成功');
+      // console.log('📊 isLiked:', isLiked.value, '后端返回:', reply.isLike);
+    }
+  } catch (error) {
+    console.error('❌ 详情页数据加载失败:', error);
+    // getDetailPage 已经处理了 alert 提示，这里只需记录日志
+    // 可选：加载失败时跳转到首页或列表页
+    // router.push('/');
+  }
+});
+
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
   const html = marked.parse(contentData.value.content);
@@ -272,9 +263,31 @@ const goBack = () => {
   router.back();
 };
 
-const toggleLike = () => {
+// 点赞/取消点赞按钮监听
+const toggleLike = async () => {
+  // 检查用户是否登录，未登录则提示跳转登录页
+  if (!isLogin.value) {
+    const goLogin = confirm('请先登录，是否跳转登录页？');
+    if (goLogin) router.push('/login');
+    return;
+  }
   isLiked.value = !isLiked.value;
   likeCount.value += isLiked.value ? 1 : -1;
+  // 异步后端更新
+  try{
+    if (isLiked.value) {
+      // 点赞
+      await likeDetailPage(props.id);
+    } else {
+      // 取消点赞
+      await cancelLikeDetailPage(props.id);
+    }
+  } catch (error) {
+    console.error('❌ 操作失败:', error);
+    // 恢复点赞/取消点赞状态
+    likeCount.value -= isLiked.value ? 1 : -1;
+    isLiked.value = !isLiked.value;
+  }
 };
 
 const toggleCollect = () => {

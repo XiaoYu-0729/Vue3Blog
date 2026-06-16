@@ -47,7 +47,7 @@ import { ref, onMounted } from 'vue';
 import {  isMobile, checkMobile } from '@/config/tools';
 import router from '@/config';
 import { useUserStore } from '@/store/userStore';
-import axios from 'axios';
+import { request } from '@/config/request';
 
 const username = ref('')
 const password = ref('')
@@ -66,7 +66,7 @@ const handleLogin = async () => {
   }
   
   try {
-    const response = await axios.post('/flask/login', {
+    const response = await request.post('/login', {
       headers: {
         'Content-Type': 'application/json'
       },
