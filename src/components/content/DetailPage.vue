@@ -162,7 +162,7 @@ import { useRouter } from 'vue-router';
 import {useUserStore} from '@/store/userStore';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
-import { getDetailPage, likeDetailPage, cancelLikeDetailPage } from '@/config/request';
+import { getDetailPage, likeDetailPage, cancelLikeDetailPage, collectDetailPage, cancelCollectDetailPage } from '@/config/request';
 import FilesList from '../tools/FilesList.vue';
 
 const router = useRouter();
@@ -238,7 +238,7 @@ onMounted(async () => {
       collectCount.value = reply.data.collect_count || 0;
       isLogin.value = reply.isLogin || false;
       isLiked.value = reply.isLike || false;
-      isCollected.value = reply.isCollected || false;
+      isCollected.value = reply.isCollect || false;
       // 加载完成后，隐藏加载状态
       // isLoading.value = false;
       console.log('✅ 详情页数据加载成功');
@@ -290,9 +290,31 @@ const toggleLike = async () => {
   }
 };
 
-const toggleCollect = () => {
+// 收藏/取消收藏按钮监听
+const toggleCollect = async () => {
+  // 检查用户是否登录，未登录则提示跳转登录页
+  if (!isLogin.value) {
+    const goLogin = confirm('请先登录，是否跳转登录页？');
+    if (goLogin) router.push('/login');
+    return;
+  }
   isCollected.value = !isCollected.value;
   collectCount.value += isCollected.value ? 1 : -1;
+  // 异步后端更新
+  try{
+    if (isCollected.value) {
+      // 收藏
+      await collectDetailPage(props.id);
+    } else {
+      // 取消收藏
+      await cancelCollectDetailPage(props.id);
+    }
+  } catch (error) {
+    console.error('❌ 操作失败:', error);
+    // 恢复收藏/取消收藏状态
+    collectCount.value -= isCollected.value ? 1 : -1;
+    isCollected.value = !isCollected.value;
+  }
 };
 
 const shareContent = async () => {

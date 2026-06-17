@@ -250,7 +250,7 @@ export const uploadFiles = async (files, source = 'default') => {
     let errorMsg = '文件上传失败';
     if (error.response?.status === 401) {
       throw error;
-    } else if ((error.response?.status === 400 || error.response?.status === 500) && error.response?.data?.message) {
+    } else if (error.response?.data?.message) {
       errorMsg = error.response.data.message;
     }  else if (error.response?.status) {
       // 其他状态码错误
@@ -418,15 +418,69 @@ export const cancelLikeDetailPage = async (id) => {
   }
 }
 
-export default { 
-    uploadImage, 
-    imageView, 
-    revokeImageUrl, 
-    revokeAllImageUrls, 
-    uploadFiles, 
-    contentLengthLimit,
-    fetchHomeData,
-    combineData,
-    getDetailPage,
-    likeDetailPage
-};
+// 详情页收藏功能
+export const collectDetailPage = async (id) => {
+  try {
+    console.log('📡 提交收藏请求，ID:', id);
+    const response = await request.post(`/update/${id}/collect`, {
+      timeout: 10000,  // 10 秒超时
+    });
+    
+    if (response?.data && response?.data?.message === 'success') {
+      console.log('✅ 收藏成功');
+    } else {
+      throw new Error('响应数据异常，请联系管理员。');
+    }
+  }catch (error) {
+      console.error('❌ 收藏失败:', error);
+      let errorMessage = '操作失败, 请联系管理员';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status) {
+        errorMessage = error.response.statusText;
+      } else {
+        errorMessage = error.message;
+      }
+      alert(`收藏失败: ${errorMessage}`);
+      throw error;
+  }
+}
+
+export const cancelCollectDetailPage = async (id) => {
+  try {
+    console.log('📡 提交取消收藏请求，ID:', id);
+    const response = await request.delete(`/update/${id}/collect`, {
+      timeout: 10000,  // 10 秒超时
+    });
+    
+    if (response?.data && response?.data?.message === 'success') {
+      console.log('✅ 取消收藏成功');
+    } else {
+      throw new Error('响应数据异常，请联系管理员。');
+    }
+  }catch (error) {
+      console.error('❌ 取消收藏失败:', error);
+      let errorMessage = '操作失败, 请联系管理员';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status) {
+        errorMessage = error.response.statusText;
+      } else {
+        errorMessage = error.message;
+      }
+      alert(`取消收藏失败: ${errorMessage}`);
+      throw error;
+  }
+}
+
+// export default { 
+//     uploadImage, 
+//     imageView, 
+//     revokeImageUrl, 
+//     revokeAllImageUrls, 
+//     uploadFiles, 
+//     contentLengthLimit,
+//     fetchHomeData,
+//     combineData,
+//     getDetailPage
+// };
