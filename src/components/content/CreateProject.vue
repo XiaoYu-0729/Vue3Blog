@@ -231,7 +231,8 @@ const handleCoverChange = async (event) => {
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
       console.error('封面上传失败:', error);
-      // uploadImage 和 imageView 内部已经有 alert 提示，这里不需要重复
+      alert(`封面上传失败: ${error.message}`);
+      return;
     }
   }
 };
@@ -247,7 +248,8 @@ const handleCoverDrop = async (event) => {
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
       console.error('封面上传失败:', error);
-      // uploadImage 和 imageView 内部已经有 alert 提示，这里不需要重复
+      alert(`封面上传失败: ${error.message}`);
+      return;
     }
   }
 };
@@ -374,6 +376,7 @@ const publishProject = async () => {
       console.log('✅ 文件上传成功:', fileUrls);
     } catch (error) {
       console.error('❌ 文件上传失败:', error);
+      alert(`文件上传失败: ${error.message}`);
       return;
     }
   }

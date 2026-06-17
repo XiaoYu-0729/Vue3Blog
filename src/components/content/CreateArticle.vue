@@ -180,6 +180,8 @@ const handleFileChange = async (event) => {
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
       console.error('封面上传失败:', error);
+      alert(`封面上传失败: ${error.message}`);
+      return;
     }
   }
 };
@@ -196,6 +198,8 @@ const handleDrop = async (event) => {
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
       console.error('封面上传失败:', error);
+      alert(`封面上传失败: ${error.message}`);
+      return;
     }
   }
 };

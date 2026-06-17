@@ -105,7 +105,7 @@ export const uploadImage = async (file, source = 'default') => {
     
     // 提取后端返回的错误信息（500 状态码时 jsonify(e) 的内容）
     let errorMsg = '图片上传失败';
-    if(error.response.status === 401) {
+    if (error.response?.status === 401) {
       throw error;
     } else if (error.response?.status === 500 && error.response?.data?.message) {
       errorMsg = error.response.data.message;
@@ -116,8 +116,7 @@ export const uploadImage = async (file, source = 'default') => {
       errorMsg = error.message;
     }
     
-    alert(errorMsg);
-    throw error;
+    throw new Error(errorMsg);
   }
 };
 
@@ -249,7 +248,7 @@ export const uploadFiles = async (files, source = 'default') => {
     
     // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
     let errorMsg = '文件上传失败';
-    if(error.response.status === 401) {
+    if (error.response?.status === 401) {
       throw error;
     } else if ((error.response?.status === 400 || error.response?.status === 500) && error.response?.data?.message) {
       errorMsg = error.response.data.message;
@@ -260,8 +259,7 @@ export const uploadFiles = async (files, source = 'default') => {
       errorMsg = error.message;
     }
     
-    alert(errorMsg);
-    throw error;
+    throw new Error(errorMsg);
   }
 };
 
