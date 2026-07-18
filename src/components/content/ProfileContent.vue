@@ -203,7 +203,7 @@ const handleLogout = async() => {
 }
 
 .menu-item:hover {
-  transform: translateX(8px);
+  transform: translateX(clamp(5px, 1vw, 8px));
 }
 
 .menu-item:active {

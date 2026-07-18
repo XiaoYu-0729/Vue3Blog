@@ -5,22 +5,22 @@
   right: 0;
   bottom: 0;
   background: rgba(136, 136, 136, 0.452);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(clamp(2px, 0.4vw, 4px));
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 20px;
-  border-radius: 24px;
+  padding: clamp(12px, 2vw, 20px);
+  border-radius: clamp(16px, 2.4vw, 24px);
 }
 
 .modal-container {
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 24px;
-  border: 2px solid rgba(200, 150, 255, 0.4);
-  box-shadow: 0 20px 60px rgba(150, 80, 200, 0.3);
+  border-radius: clamp(16px, 2.4vw, 24px);
+  border: clamp(1px, 0.2vw, 2px) solid rgba(200, 150, 255, 0.4);
+  box-shadow: 0 clamp(12px, 2vw, 20px) clamp(36px, 6vw, 60px) rgba(150, 80, 200, 0.3);
   width: 100%;
-  max-width: 480px;
+  max-width: clamp(320px, 40vw, 480px);
   max-height: 90vh;
   overflow: hidden;
   display: flex;
@@ -31,17 +31,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid rgba(200, 150, 255, 0.2);
+  padding: clamp(12px, 2vw, 20px) clamp(14px, 2.4vw, 24px);
+  border-bottom: clamp(1px, 0.15vw, 1px) solid rgba(200, 150, 255, 0.2);
 }
 
 .modal-title {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
   color: #7c3a9e;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 1vw, 10px);
 }
 
 .modal-title i {
@@ -51,10 +51,10 @@
 .close-btn {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
   color: #9b7bb8;
   cursor: pointer;
-  padding: 8px;
+  padding: clamp(4px, 0.8vw, 8px);
   border-radius: 50%;
   transition: all 0.3s;
 }
@@ -65,36 +65,36 @@
 }
 
 .modal-body {
-  padding: 24px;
+  padding: clamp(16px, 2.4vw, 24px);
   overflow-y: auto;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: clamp(12px, 2vw, 20px);
 }
 
 .form-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.95rem;
+  gap: clamp(4px, 0.8vw, 8px);
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
   color: #7c5a9e;
-  margin-bottom: 8px;
+  margin-bottom: clamp(4px, 0.8vw, 8px);
   font-weight: 500;
 }
 
 .form-label i {
   color: #b983ff;
-  width: 18px;
+  width: clamp(14px, 1.5vw, 18px);
 }
 
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e9d4f5;
-  border-radius: 12px;
-  font-size: 1rem;
+  padding: clamp(8px, 1.2vw, 12px) clamp(10px, 1.6vw, 16px);
+  border: clamp(1px, 0.2vw, 2px) solid #e9d4f5;
+  border-radius: clamp(8px, 1.2vw, 12px);
+  font-size: clamp(0.85rem, 1vw, 1rem);
   background: rgba(255, 255, 255, 0.9);
   color: #3f2b4f;
   transition: all 0.3s;
@@ -105,12 +105,12 @@
 .form-textarea:focus {
   outline: none;
   border-color: #b983ff;
-  box-shadow: 0 0 0 4px rgba(185, 131, 255, 0.15);
+  box-shadow: 0 0 0 clamp(3px, 0.4vw, 4px) rgba(185, 131, 255, 0.15);
 }
 
 .form-textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: clamp(60px, 10vh, 80px);
 }
 
 /* 头像上传 */
@@ -122,52 +122,52 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: clamp(8px, 1.2vw, 12px);
 }
 
 .avatar-preview {
-  width: 100px;
-  height: 100px;
+  width: clamp(80px, 8.3vw, 100px);
+  height: clamp(80px, 8.3vw, 100px);
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(185, 131, 255, 0.4);
-  box-shadow: 0 4px 16px rgba(185, 131, 255, 0.3);
+  border: clamp(2px, 0.3vw, 3px) solid rgba(185, 131, 255, 0.4);
+  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(10px, 1.6vw, 16px) rgba(185, 131, 255, 0.3);
 }
 
 .btn-upload {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: clamp(4px, 0.8vw, 8px);
+  padding: clamp(6px, 0.8vw, 8px) clamp(10px, 1.6vw, 16px);
   background: linear-gradient(135deg, #b983ff, #ff9cef);
   color: white;
   border: none;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  border-radius: clamp(14px, 2vw, 20px);
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .btn-upload:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(185, 131, 255, 0.4);
+  transform: translateY(clamp(-1px, -0.2vh, -2px));
+  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 2vw, 20px) rgba(185, 131, 255, 0.4);
 }
 
 /* 密码区域 */
 .form-section {
-  margin-top: 24px;
-  border-top: 1px solid rgba(200, 150, 255, 0.2);
-  padding-top: 16px;
+  margin-top: clamp(16px, 2.4vw, 24px);
+  border-top: clamp(1px, 0.15vw, 1px) solid rgba(200, 150, 255, 0.2);
+  padding-top: clamp(10px, 1.6vw, 16px);
 }
 
 .section-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 1vw, 10px);
   color: #7c5a9e;
   font-weight: 500;
   cursor: pointer;
-  padding: 8px 0;
+  padding: clamp(4px, 0.8vw, 8px) 0;
   transition: color 0.3s;
 }
 
@@ -185,24 +185,24 @@
 }
 
 .section-content {
-  padding-top: 12px;
+  padding-top: clamp(8px, 1.2vw, 12px);
 }
 
 /* 底部按钮 */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(200, 150, 150, 0.2);
-  margin-top: 8px;
+  gap: clamp(8px, 1.2vw, 12px);
+  padding-top: clamp(12px, 2vw, 20px);
+  border-top: clamp(1px, 0.15vw, 1px) solid rgba(200, 150, 150, 0.2);
+  margin-top: clamp(4px, 0.8vw, 8px);
 }
 
 .btn-cancel,
 .btn-submit {
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-size: 1rem;
+  padding: clamp(8px, 1.2vw, 12px) clamp(16px, 2.4vw, 24px);
+  border-radius: clamp(8px, 1.2vw, 12px);
+  font-size: clamp(0.85rem, 1vw, 1rem);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
@@ -210,7 +210,7 @@
 
 .btn-cancel {
   background: rgba(255, 255, 255, 0.8);
-  border: 2px solid #e9d4f5;
+  border: clamp(1px, 0.2vw, 2px) solid #e9d4f5;
   color: #7c5a9e;
 }
 
@@ -225,13 +225,13 @@
   color: white;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 8px 20px rgba(185, 131, 255, 0.3);
+  gap: clamp(4px, 0.8vw, 8px);
+  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 2vw, 20px) rgba(185, 131, 255, 0.3);
 }
 
 .btn-submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(185, 131, 255, 0.4);
+  transform: translateY(clamp(-1px, -0.2vh, -2px));
+  box-shadow: 0 clamp(6px, 1.2vw, 12px) clamp(16px, 2.8vw, 28px) rgba(185, 131, 255, 0.4);
 }
 
 .btn-submit:disabled {
@@ -241,24 +241,24 @@
 
 /* 滚动条样式 */
 .modal-body::-webkit-scrollbar {
-  width: 6px;
+  width: clamp(4px, 0.6vw, 6px);
 }
 
 .modal-body::-webkit-scrollbar-track {
   background: #f2d9ff;
-  border-radius: 6px;
+  border-radius: clamp(4px, 0.6vw, 6px);
 }
 
 .modal-body::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #ca9eff, #ffa2de);
-  border-radius: 6px;
+  border-radius: clamp(4px, 0.6vw, 6px);
 }
 
 /* 移动端适配 */
 @media (max-width: 480px) {
   .modal-title {
-    font-size: 1rem;
-    gap: 7px;
+    font-size: clamp(0.85rem, 1.3vw, 1rem);
+    gap: clamp(5px, 1.2vw, 7px);
   }
 
   .modal-overlay {
@@ -268,79 +268,79 @@
   }
 
   .avatar-preview {
-    width: 75px;
-    height: 75px;
+    width: clamp(60px, 12.5vw, 75px);
+    height: clamp(60px, 12.5vw, 75px);
   }
 
   .btn-upload {
-    padding: 5px 12px;
-    border-radius: 15px;
-    gap: 5px;
-    font-size: 0.75rem;
+    padding: clamp(3px, 0.8vw, 5px) clamp(8px, 2vw, 12px);
+    border-radius: clamp(10px, 2.5vw, 15px);
+    gap: clamp(3px, 0.8vw, 5px);
+    font-size: clamp(0.65rem, 1vw, 0.75rem);
   }
 
   .modal-container {
     max-height: 85vh;
-    border-radius: 24px 24px 0 0;
+    border-radius: clamp(16px, 4vw, 24px) clamp(16px, 4vw, 24px) 0 0;
   }
 
   .modal-header {
-    padding: 10px 15px;
+    padding: clamp(6px, 1.7vw, 10px) clamp(10px, 2.5vw, 15px);
   }
 
   .modal-body {
-    padding: 20px;
+    padding: clamp(12px, 3.3vw, 20px);
   }
 
   .form-group {
-    margin-bottom: 10px;
+    margin-bottom: clamp(6px, 1.7vw, 10px);
   }
 
   .form-label {
-    gap: 8px;
-    font-size: 0.8rem;
-    margin-bottom: 5px;
+    gap: clamp(5px, 1.3vw, 8px);
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
+    margin-bottom: clamp(3px, 0.8vw, 5px);
   }
 
   .form-label i {
-    width: 12px;
+    width: clamp(10px, 2vw, 12px);
   }
 
   .form-input,
   .form-textarea {
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 0.9rem;
+    padding: clamp(5px, 1.3vw, 8px) clamp(8px, 2vw, 12px);
+    border-radius: clamp(6px, 1.7vw, 10px);
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
   }
 
   /* 密码区域 */
   .form-section {
-    margin-top: 20px;
-    padding-top: 5px;
+    margin-top: clamp(12px, 3.3vw, 20px);
+    padding-top: clamp(3px, 0.8vw, 5px);
   }
 
   .section-title {
-    gap: 8px;
-    padding: 8px 0;
+    gap: clamp(5px, 1.3vw, 8px);
+    padding: clamp(5px, 1.3vw, 8px) 0;
     font-weight: 300;
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
   }
 
   .section-content {
-    padding-top: 10px;
+    padding-top: clamp(6px, 1.7vw, 10px);
   }
 
   /* 底部按钮 */
   .modal-footer {
-    gap: 10px;
-    padding-top: 12px;
-    margin-top: 5px;
+    gap: clamp(6px, 1.7vw, 10px);
+    padding-top: clamp(8px, 2vw, 12px);
+    margin-top: clamp(3px, 0.8vw, 5px);
   }
 
   .btn-cancel,
   .btn-submit {
-    padding: 7px 12px;
-    border-radius: 10px;
-    font-size: 0.8rem;
+    padding: clamp(5px, 1.2vw, 7px) clamp(8px, 2vw, 12px);
+    border-radius: clamp(6px, 1.7vw, 10px);
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
   }
 }

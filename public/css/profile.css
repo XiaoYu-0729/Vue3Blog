@@ -18,19 +18,19 @@
 }
 
 .circle-1 {
-  width: 220px;
-  height: 220px;
+  width: clamp(150px, 18.3vw, 220px);
+  height: clamp(150px, 18.3vw, 220px);
   background: linear-gradient(135deg, #b983ff, #ff9cef);
-  top: -80px;
-  left: -60px;
+  top: clamp(-60px, -6.7vh, -80px);
+  left: clamp(-50px, -5vw, -60px);
 }
 
 .circle-2 {
-  width: 180px;
-  height: 180px;
+  width: clamp(120px, 15vw, 180px);
+  height: clamp(120px, 15vw, 180px);
   background: linear-gradient(135deg, #4facfe, #00f2fe);
-  bottom: 150px;
-  right: -50px;
+  bottom: clamp(100px, 15vh, 150px);
+  right: clamp(-40px, -4.2vw, -50px);
 }
 
 /* 用户信息头部 */
@@ -38,13 +38,13 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 15px 0;
+  padding: clamp(10px, 1.5vh, 15px) 0;
 }
 
 .avatar-wrapper {
   position: relative;
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: clamp(6px, 1vw, 10px);
   cursor: pointer;
 }
 
@@ -53,19 +53,19 @@
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: 28px;
-  height: 28px;
+  bottom: clamp(2px, 0.4vw, 4px);
+  right: clamp(2px, 0.4vw, 4px);
+  width: clamp(22px, 2.3vw, 28px);
+  height: clamp(22px, 2.3vw, 28px);
   background: linear-gradient(135deg, #b983ff, #ff9cef);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 0.75rem;
-  border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(185, 131, 255, 0.4);
+  font-size: clamp(0.65rem, 0.75vw, 0.75rem);
+  border: clamp(1px, 0.2vw, 2px) solid white;
+  box-shadow: 0 clamp(1px, 0.2vw, 2px) clamp(6px, 0.8vw, 8px) rgba(185, 131, 255, 0.4);
   opacity: 0;
   transform: scale(0.8);
   transition: all 0.3s ease;
@@ -77,12 +77,12 @@
 }
 
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: clamp(80px, 8.3vw, 100px);
+  height: clamp(80px, 8.3vw, 100px);
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 8px 24px rgba(170, 75, 245, 0.4);
-  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(14px, 2.4vw, 24px) rgba(170, 75, 245, 0.4);
+  border: clamp(3px, 0.4vw, 4px) solid rgba(255, 255, 255, 0.9);
   position: relative;
   z-index: 2;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -90,19 +90,19 @@
 
 .avatar-wrapper:hover .avatar {
   transform: scale(1.05);
-  box-shadow: 0 12px 32px rgba(170, 75, 245, 0.5);
+  box-shadow: 0 clamp(6px, 1.2vw, 12px) clamp(18px, 3.2vw, 32px) rgba(170, 75, 245, 0.5);
 }
 
 .avatar span {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
   color: white;
   font-weight: 600;
 }
 
 .avatar-ring {
   position: absolute;
-  inset: -8px;
-  border: 3px dashed rgba(185, 131, 255, 0.4);
+  inset: clamp(-6px, -0.8vw, -8px);
+  border: clamp(2px, 0.3vw, 3px) dashed rgba(185, 131, 255, 0.4);
   border-radius: 50%;
   animation: rotate 20s linear infinite;
 }
@@ -114,19 +114,19 @@
 
 .profile-header h2 {
   color: #7c3a9e;
-  font-size: 1.6rem;
-  margin: 0 0 8px;
+  font-size: clamp(1.3rem, 1.6vw, 1.6rem);
+  margin: 0 0 clamp(4px, 0.8vw, 8px);
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: clamp(0.5px, 0.1vw, 1px);
 }
 
 .profile-bio {
   color: #9b7bb5;
-  font-size: 0.95rem;
-  margin: 0 0 10px;
-  padding: 8px 16px;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+  margin: 0 0 clamp(6px, 1vw, 10px);
+  padding: clamp(6px, 0.8vw, 8px) clamp(10px, 1.6vw, 16px);
   background: rgba(255, 255, 255, 0.6);
-  border-radius: 20px;
+  border-radius: clamp(14px, 2vw, 20px);
   display: inline-block;
   max-width: 80%;
   line-height: 1.5;
@@ -135,8 +135,8 @@
 
 .profile-tag {
   color: #9b7bb5;
-  font-size: 0.95rem;
-  margin: 0 0 24px;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+  margin: 0 0 clamp(16px, 2.4vw, 24px);
 }
 
 /* 统计数据 */
@@ -144,13 +144,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: clamp(12px, 2vw, 20px);
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  padding: 10px 15px;
-  border-radius: 20px;
-  border: 1px solid rgba(230, 180, 255, 0.4);
-  max-width: 205px;
+  backdrop-filter: blur(clamp(5px, 1vw, 10px));
+  padding: clamp(6px, 1vw, 10px) clamp(10px, 1.5vw, 15px);
+  border-radius: clamp(14px, 2vw, 20px);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(230, 180, 255, 0.4);
+  max-width: clamp(160px, 17vw, 205px);
   margin: 0 auto;
 }
 
@@ -158,23 +158,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: clamp(2px, 0.4vw, 4px);
 }
 
 .stat-num {
   color: #7c4caf;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
   font-weight: 600;
 }
 
 .stat-label {
   color: #9b7bb5;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 0.8vw, 0.8rem);
 }
 
 .stat-divider {
-  width: 1px;
-  height: 30px;
+  width: clamp(1px, 0.15vw, 1px);
+  height: clamp(20px, 3vh, 30px);
   background: rgba(200, 150, 255, 0.4);
 }
 
@@ -183,20 +183,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin: 15px 0;
+  gap: clamp(8px, 1.2vw, 12px);
+  margin: clamp(10px, 1.5vw, 15px) 0;
 }
 
 .divider-dot {
-  width: 8px;
-  height: 8px;
+  width: clamp(6px, 0.8vw, 8px);
+  height: clamp(6px, 0.8vw, 8px);
   background: linear-gradient(135deg, #b983ff, #ff9cef);
   border-radius: 50%;
 }
 
 .divider-line {
-  width: 60px;
-  height: 2px;
+  width: clamp(40px, 5vw, 60px);
+  height: clamp(1px, 0.2vw, 2px);
   background: linear-gradient(90deg, transparent, rgba(200, 150, 255, 0.5), transparent);
 }
 
@@ -208,19 +208,19 @@
 
 .menu-list {
   background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
+  border-radius: clamp(14px, 2vw, 20px);
   overflow: hidden;
-  border: 1px solid rgba(230, 180, 255, 0.4);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(230, 180, 255, 0.4);
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
+  gap: clamp(10px, 1.4vw, 14px);
+  padding: clamp(10px, 1.4vw, 14px) clamp(12px, 1.8vw, 18px);
   cursor: pointer;
   transition: all 0.2s;
-  border-bottom: 1px solid rgba(230, 180, 255, 0.15);
+  border-bottom: clamp(1px, 0.15vw, 1px) solid rgba(230, 180, 255, 0.15);
 }
 
 .menu-item:last-child {
@@ -229,14 +229,14 @@
 
 .menu-item:hover {
   background: rgba(240, 210, 255, 0.4);
-  margin: 0 -15px;
+  margin: 0 clamp(-10px, -1.5vw, -15px);
 }
 
 .menu-icon {
-  width: 42px;
-  height: 42px;
-  margin-left: 15px;
-  border-radius: 12px;
+  width: clamp(34px, 3.5vw, 42px);
+  height: clamp(34px, 3.5vw, 42px);
+  margin-left: clamp(10px, 1.5vw, 15px);
+  border-radius: clamp(8px, 1.2vw, 12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -244,7 +244,7 @@
 }
 
 .menu-icon i {
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 1.1vw, 1.1rem);
   color: white;
 }
 
@@ -258,61 +258,61 @@
 .menu-label {
   color: #5a3b7a;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
 }
 
 .menu-arrow {
   color: #b87cd9;
-  font-size: 0.85rem;
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
   opacity: 0.5;
-  margin-right: 20px;
+  margin-right: clamp(12px, 2vw, 20px);
 }
 
 /* 退出登录 */
 .logout-section {
   position: relative;
   z-index: 1;
-  padding: 24px 0;
+  padding: clamp(16px, 2.4vw, 24px) 0;
   text-align: center;
 }
 
 .logout-btn {
   background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 150, 180, 0.5);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(255, 150, 180, 0.5);
   color: #c44569;
-  padding: 12px 40px;
-  border-radius: 30px;
-  font-size: 0.95rem;
+  padding: clamp(8px, 1.2vw, 12px) clamp(28px, 4vw, 40px);
+  border-radius: clamp(20px, 3vw, 30px);
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
   cursor: pointer;
   transition: all 0.25s;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: clamp(4px, 0.8vw, 8px);
 }
 
 .logout-btn:hover {
   background: linear-gradient(135deg, #ff9a9e, #fecfef);
   color: white;
   border-color: transparent;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 150, 180, 0.4);
+  transform: translateY(clamp(-1px, -0.2vh, -2px));
+  box-shadow: 0 clamp(4px, 0.6vw, 6px) clamp(10px, 1.6vw, 16px) rgba(255, 150, 180, 0.4);
 }
 
 /* 底部信息 */
 .profile-footer {
   text-align: center;
-  padding: 20px;
+  padding: clamp(12px, 2vw, 20px);
 }
 
 .copyright {
   color: #7c4caf;
-  font-size: 0.95rem;
-  margin: 0 0 4px;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
+  margin: 0 0 clamp(2px, 0.4vw, 4px);
 }
 
 .version {
   color: #9b7bb5;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 0.8vw, 0.8rem);
   margin: 0;
   opacity: 0.7;
 }
@@ -320,20 +320,20 @@
 /* 响应式 */
 @media (max-width: 600px) {
   .avatar {
-    width: 85px;
-    height: 85px;
+    width: clamp(70px, 14.2vw, 85px);
+    height: clamp(70px, 14.2vw, 85px);
   }
   
   .avatar span {
-    font-size: 2rem;
+    font-size: clamp(1.6rem, 3.3vw, 2rem);
   }
   
   .profile-stats {
-    padding: 14px 24px;
-    gap: 16px;
+    padding: clamp(10px, 2.3vw, 14px) clamp(16px, 4vw, 24px);
+    gap: clamp(12px, 2.7vw, 16px);
   }
   
   .stat-num {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
   }
 }

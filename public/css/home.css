@@ -6,14 +6,14 @@
 .category-tabs {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
-  padding: 12px 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(200, 150, 255, 0.3);
+  gap: clamp(8px, 1.2vw, 12px);
+  margin-bottom: clamp(16px, 2.8vw, 28px);
+  padding: clamp(8px, 1.2vw, 12px) clamp(10px, 1.6vw, 16px);
+  border-radius: clamp(16px, 2.4vw, 24px);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(200, 150, 255, 0.3);
   flex-wrap: wrap;
   background: linear-gradient(145deg, #ffe9f4a9 10%, #ecdbfcba 90%);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(clamp(2px, 0.4vw, 4px));
   position: sticky;
   top: 0;
   z-index: 10;
@@ -23,21 +23,21 @@
 .tab-btn {
   background: transparent;
   border: none;
-  padding: 8px 20px;
-  font-size: 1.1rem;
+  padding: clamp(6px, 0.8vw, 8px) clamp(12px, 2vw, 20px);
+  font-size: clamp(0.9rem, 1.1vw, 1.1rem);
   font-weight: 500;
   color: #6b4b8c;
   cursor: pointer;
-  border-radius: 40px;
+  border-radius: clamp(30px, 4vw, 40px);
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  border: 1px solid transparent;
+  gap: clamp(4px, 0.8vw, 8px);
+  border: clamp(1px, 0.15vw, 1px) solid transparent;
 }
 
 .tab-btn i {
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 1.1vw, 1.1rem);
   color: #b87cd9;
 }
 
@@ -49,7 +49,7 @@
 .tab-btn.active {
   background: linear-gradient(135deg, #c49bff, #ffb3e6);
   color: white;
-  box-shadow: 0 4px 12px rgba(180, 90, 230, 0.4);
+  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(8px, 1.2vw, 12px) rgba(180, 90, 230, 0.4);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -62,43 +62,42 @@
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  border-radius: 40px;
-  padding: 4px 12px;
-  border: 1px solid rgba(200, 150, 255, 0.5);
-  box-shadow: 0 4px 12px rgba(170, 90, 220, 0.1);
+  backdrop-filter: blur(clamp(4px, 0.8vw, 8px));
+  border-radius: clamp(30px, 4vw, 40px);
+  padding: clamp(2px, 0.4vw, 4px) clamp(8px, 1.2vw, 12px);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(200, 150, 255, 0.5);
+  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(8px, 1.2vw, 12px) rgba(170, 90, 220, 0.1);
   transition: box-shadow 0.2s;
-  /* 修改点：让搜索栏尽可能宽，但保留最小宽度 */
   flex: 1 1 auto;
-  min-width: 180px;
+  min-width: clamp(120px, 15vw, 180px);
 }
 
 .search-bar:focus-within {
-  box-shadow: 0 6px 16px rgba(180, 90, 230, 0.25);
+  box-shadow: 0 clamp(4px, 0.6vw, 6px) clamp(10px, 1.6vw, 16px) rgba(180, 90, 230, 0.25);
   border-color: #c084fc;
 }
 
 .search-bar i {
   color: #b87cd9;
-  font-size: 1rem;
-  margin-right: 6px;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  margin-right: clamp(4px, 0.6vw, 6px);
 }
 
 .search-bar input {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 6px 0;
-  font-size: 0.95rem;
+  padding: clamp(4px, 0.6vw, 6px) 0;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
   color: #4a2c5f;
   outline: none;
-  min-width: 100px;
+  min-width: clamp(80px, 10vw, 100px);
 }
 
 .search-bar input::placeholder {
   color: #b59fc9;
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .clear-search {
@@ -106,10 +105,10 @@
   border: none;
   color: #b87cd9;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1vw, 1rem);
   display: flex;
   align-items: center;
-  padding: 0 4px;
+  padding: 0 clamp(2px, 0.4vw, 4px);
   transition: color 0.2s;
 }
 
@@ -120,65 +119,65 @@
 /* 选中提示（靠右） */
 .tab-hint {
   margin-left: auto;
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
   color: #a855f7;
   background: rgba(255, 215, 245, 0.6);
-  padding: 4px 12px;
-  border-radius: 30px;
-  backdrop-filter: blur(4px);
+  padding: clamp(2px, 0.4vw, 4px) clamp(8px, 1.2vw, 12px);
+  border-radius: clamp(20px, 3vw, 30px);
+  backdrop-filter: blur(clamp(2px, 0.4vw, 4px));
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid rgba(200, 130, 255, 0.4);
+  gap: clamp(4px, 0.6vw, 6px);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(200, 130, 255, 0.4);
   white-space: nowrap;
 }
 
 .tab-hint i {
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .hint-count {
   font-weight: 600;
   color: #8816b5;
   background: rgb(255, 255, 255);
-  padding: 2px 8px;
-  border-radius: 20px;
-  margin-left: 4px;
+  padding: clamp(1px, 0.2vw, 2px) clamp(4px, 0.8vw, 8px);
+  border-radius: clamp(14px, 2vw, 20px);
+  margin-left: clamp(2px, 0.4vw, 4px);
 }
 
 /* 内容列表 */
 .content-list {
-  min-height: 300px;
+  min-height: clamp(200px, 30vh, 300px);
 }
 
 /* 卡片样式 - 横向布局 */
 .content-card {
   display: flex;
-  gap: 20px;
+  gap: clamp(12px, 2vw, 20px);
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 16px;
-  border: 1px solid rgba(230, 180, 255, 0.5);
-  box-shadow: 0 8px 18px -6px rgba(150, 80, 200, 0.2);
+  backdrop-filter: blur(clamp(4px, 0.8vw, 8px));
+  border-radius: clamp(14px, 2vw, 20px);
+  padding: clamp(10px, 1.6vw, 16px);
+  margin-bottom: clamp(10px, 1.6vw, 16px);
+  border: clamp(1px, 0.15vw, 1px) solid rgba(230, 180, 255, 0.5);
+  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 1.8vw, 18px) clamp(-3px, -0.6vw, -6px) rgba(150, 80, 200, 0.2);
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   overflow: hidden;
 }
 
 .content-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 28px -8px rgba(170, 90, 220, 0.3);
+  transform: translateY(clamp(-2px, -0.3vh, -3px));
+  box-shadow: 0 clamp(10px, 1.8vw, 18px) clamp(16px, 2.8vw, 28px) clamp(-4px, -0.8vw, -8px) rgba(170, 90, 220, 0.3);
   background: rgba(255, 245, 255, 0.9);
 }
 
 /* 封面区域 */
 .card-cover {
   flex-shrink: 0;
-  width: 140px;
-  height: 100px;
-  border-radius: 12px;
+  width: clamp(100px, 11.7vw, 140px);
+  height: clamp(70px, 10vh, 100px);
+  border-radius: clamp(8px, 1.2vw, 12px);
   overflow: hidden;
   background: linear-gradient(135deg, #f5f7fa, #e4e8ec);
 }
@@ -200,7 +199,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px;
+  font-size: clamp(28px, 3vw, 36px);
   color: #c9b8d9;
   background: linear-gradient(135deg, #f8f0ff 0%, #f0e6ff 100%);
 }
@@ -216,8 +215,8 @@
 
 .card-body h3 {
   color: #7c3a9e;
-  font-size: 1.1rem;
-  margin: 0 0 8px 0;
+  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+  margin: 0 0 clamp(4px, 0.8vw, 8px) 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -226,14 +225,14 @@
 .card-body p {
   color: #4a3a5c;
   display: -webkit-box;
-  font-size: 0.95rem;
+  font-size: clamp(0.8rem, 0.95vw, 0.95rem);
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.6;
-  margin: 0 0 12px 0;
+  margin: 0 0 clamp(8px, 1.2vw, 12px) 0;
   word-break: break-all;
   overflow-wrap: break-word;
 }
@@ -242,40 +241,40 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 0.85vw, 0.85rem);
   color: #7b5f99;
 }
 
 .meta-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: clamp(8px, 1.2vw, 12px);
 }
 
 .meta-stats {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(10px, 1.6vw, 16px);
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: clamp(4px, 0.6vw, 6px);
   color: #999;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 0.8vw, 0.8rem);
 }
 
 .stat-item i {
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
 }
 
 .type-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 40px;
+  gap: clamp(4px, 0.6vw, 6px);
+  padding: clamp(2px, 0.4vw, 4px) clamp(8px, 1.2vw, 12px);
+  border-radius: clamp(30px, 4vw, 40px);
   background: #f2e4ff;
   color: #8816b5;
 }
@@ -293,12 +292,12 @@
 .date {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: clamp(4px, 0.6vw, 6px);
   background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 100%);
-  border: 1px solid rgba(179, 229, 252, 0.6);
-  padding: 4px 12px;
-  border-radius: 40px;
-  font-size: 0.8rem;
+  border: clamp(1px, 0.15vw, 1px) solid rgba(179, 229, 252, 0.6);
+  padding: clamp(2px, 0.4vw, 4px) clamp(8px, 1.2vw, 12px);
+  border-radius: clamp(30px, 4vw, 40px);
+  font-size: clamp(0.7rem, 0.8vw, 0.8rem);
   color: #5a6c7d;
 }
 
@@ -309,11 +308,11 @@
 }
 .list-enter-from {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(clamp(20px, 3vw, 30px));
 }
 .list-leave-to {
   opacity: 0;
-  transform: translateX(-30px);
+  transform: translateX(clamp(-20px, -3vw, -30px));
 }
 .list-leave-active {
   position: absolute;
@@ -323,16 +322,16 @@
 /* 空状态 */
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: clamp(40px, 6vh, 60px) clamp(12px, 2vw, 20px);
   background: rgba(255, 235, 250, 0.5);
-  border-radius: 40px;
+  border-radius: clamp(28px, 4vw, 40px);
   color: #aa7ec7;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
 }
 
 .empty-state i {
-  font-size: 3rem;
-  margin-bottom: 16px;
+  font-size: clamp(2rem, 3vw, 3rem);
+  margin-bottom: clamp(10px, 1.6vw, 16px);
   opacity: 0.6;
 }
 
@@ -340,86 +339,87 @@
 @media (max-width: 768px) {
   
   .content-card {
-    gap: 12px;
-    padding: 12px;
+    gap: clamp(8px, 1.5vw, 12px);
+    padding: clamp(8px, 1.5vw, 12px);
   }
 
   .card-cover {
-    width: 90px;
-    height: 70px;
-    border-radius: 10px;
+    width: clamp(70px, 11.7vw, 90px);
+    height: clamp(55px, 9.1vw, 70px);
+    border-radius: clamp(6px, 1.3vw, 10px);
   }
 
   .cover-placeholder {
-    font-size: 24px;
+    font-size: clamp(18px, 3vw, 24px);
   }
 
   .card-body h3 {
-    font-size: 0.95rem;
-    margin-bottom: 6px;
+    font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+    margin-bottom: clamp(4px, 0.8vw, 6px);
   }
 
   .card-body p {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
     -webkit-line-clamp: 1;
-    margin-bottom: 8px;
+    margin-bottom: clamp(6px, 1vw, 8px);
   }
   .category-tabs {
-    gap: 6px;
-    margin-bottom: 17px;
+    gap: clamp(4px, 0.8vw, 6px);
+    margin-bottom: clamp(12px, 2.2vw, 17px);
     background: none;
+    justify-content: center;
   }
   .search-bar {
-    flex: 1 1 100%;        /* 小屏幕下搜索栏占满一行 */
+    flex: 1 1 100%;
     order: 1;
-    margin-top: 4px;
+    margin-top: clamp(2px, 0.5vw, 4px);
   }
   .search-bar i {
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
   }
 
   .search-bar input {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
     color: #4a2c5f;
     outline: none;
-    min-width: 100px;
+    min-width: clamp(80px, 13vw, 100px);
   }
 
   .search-bar input::placeholder {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
   }
   .tab-hint {
     margin-left: 0;
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 1vw, 0.75rem);
     white-space: normal;
     width: 100%;
     justify-content: center;
     order: 2;
   }
   .content-card {
-    border-radius: 16px;
-    margin-bottom: 12px;
+    border-radius: clamp(12px, 2.1vw, 16px);
+    margin-bottom: clamp(8px, 1.5vw, 12px);
   }
   .card-meta {
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 1vw, 0.75rem);
     flex-wrap: wrap;
-    gap: 8px;
+    gap: clamp(6px, 1vw, 8px);
   }
 
   .meta-left {
-    gap: 8px;
+    gap: clamp(6px, 1vw, 8px);
   }
 
   .meta-stats {
-    gap: 12px;
+    gap: clamp(8px, 1.5vw, 12px);
   }
 
   .stat-item {
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 1vw, 0.75rem);
   }
   .tab-btn {
-    padding: 8px 24px;
-    font-size: 0.8rem;
+    padding: clamp(6px, 1vw, 8px) clamp(16px, 3vw, 24px);
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
     font-weight: 600;
   }
 }

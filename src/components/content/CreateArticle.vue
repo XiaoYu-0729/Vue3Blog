@@ -18,7 +18,7 @@
     </div>
 
     <!-- 文章表单 - 自动高度 -->
-    <div class="article-form" :style="{ minHeight: formHeight + 'px' }">
+    <div class="article-form" :style="{ minHeight: formHeight + 'vh' }">
 
       <!-- 标题输入 -->
       <div class="form-section">
@@ -130,7 +130,7 @@ const selectedCategory = ref(null);
 const coverImage = ref(null);
 const coverName = ref(''); // 图片名称
 const fileInput = ref(null);
-const formHeight = ref(400); // 初始高度
+const formHeight = ref(50); // 初始高度（vh单位）
 const isParentReady = ref(false);
 
 const userStore = useUserStore();

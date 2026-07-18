@@ -86,17 +86,17 @@ onUnmounted(() => {
 </script>
 <style>
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: clamp(5px, 0.8vw, 8px);
+  height: clamp(5px, 0.8vw, 8px);
 }
 ::-webkit-scrollbar-track {
   background: #f2d9ff;
-  border-radius: 8px;
+  border-radius: clamp(5px, 0.8vw, 8px);
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #ca9eff, #ffa2de);
-  border-radius: 8px;
-  border: 2px solid #f7d0ff;
+  border-radius: clamp(5px, 0.8vw, 8px);
+  border: clamp(1px, 0.2vw, 2px) solid #f7d0ff;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b57cff, #ff85d0);
@@ -105,17 +105,17 @@ onUnmounted(() => {
 
 <style scoped>
 .content::-webkit-scrollbar {
-  width: 8px !important;
-  height: 8px !important;
+  width: clamp(5px, 0.8vw, 8px) !important;
+  height: clamp(5px, 0.8vw, 8px) !important;
 }
 .content::-webkit-scrollbar-track {
   background: #f2d9ff !important;
-  border-radius: 8px;
+  border-radius: clamp(5px, 0.8vw, 8px);
 }
 .content::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #ca9eff, #ffa2de) !important;
-  border-radius: 8px !important;
-  border: 2px solid #f7d0ff;
+  border-radius: clamp(5px, 0.8vw, 8px) !important;
+  border: clamp(1px, 0.2vw, 2px) solid #f7d0ff;
 }
 .content::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #b57cff, #ff85d0) !important;

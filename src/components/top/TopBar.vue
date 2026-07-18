@@ -23,16 +23,17 @@
 .top-nav :deep(a) {
   color: white;
   text-decoration: none;
-  margin-left: 28px;
+  margin-left: clamp(16px, 2.3vw, 28px);
   font-weight: 500;
   opacity: 0.9;
   transition: opacity 0.2s, transform 0.2s;
   display: inline-block;
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
 }
 
 .top-nav :deep(a:hover) {
   opacity: 1;
-  transform: translateY(-1px);
+  transform: translateY(clamp(-1px, -0.1vh, -1px));
 }
 
 /* 激活样式：粉紫色下划线 + 加粗 */
@@ -41,18 +42,18 @@
   font-weight: 600;
   position: relative;
   color: white !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 clamp(4px, 0.8vw, 8px) rgba(255, 255, 255, 0.5);
 }
 .top-nav :deep(a.active::after),
 .top-nav :deep(a.router-link-active::after) {
   content: '';
   position: absolute;
-  bottom: -4px;
+  bottom: clamp(-3px, -0.4vw, -4px);
   left: 0;
   width: 100%;
-  height: 3px;
+  height: clamp(2px, 0.3vw, 3px);
   background: linear-gradient(90deg, #ffffff, #ffd0fb);
-  border-radius: 2px;
-  box-shadow: 0 0 8px #ffa0f0;
+  border-radius: clamp(1px, 0.2vw, 2px);
+  box-shadow: 0 0 clamp(4px, 0.8vw, 8px) #ffa0f0;
 }
 </style>
