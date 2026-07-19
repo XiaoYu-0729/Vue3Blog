@@ -117,15 +117,15 @@ const menuSections = reactive([
       { id: 4, icon: 'fas fa-cubes', label: '我的项目', gradient: 'linear-gradient(135deg, #30cfd0, #330867)', action: 'projects' },
       { id: 5, icon: 'fas fa-heart', label: '我的点赞', gradient: 'linear-gradient(135deg, #ff9a9e, #fecfef)', action: 'likes' },
       { id: 6, icon: 'fas fa-star', label: '我的收藏', gradient: 'linear-gradient(135deg, #a18cd1, #fbc2eb)', action: 'collections' },
-      { id: 7, icon: 'fas fa-history', label: '浏览历史', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'history' },
+      // { id: 7, icon: 'fas fa-history', label: '浏览历史', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'history' },
     ]
   },
   {
     items: [
       { id: 8, icon: 'fas fa-user', label: '编辑个人资料', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'account' },
-      { id: 9, icon: 'fas fa-bell', label: '通知设置', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)', action: 'notifications' },
-      { id: 10, icon: 'fas fa-download', label: '下载管理', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'downloads' },
-      { id: 11, icon: 'fas fa-shield-alt', label: '隐私与安全', gradient: 'linear-gradient(135deg, #667eea, #764ba2)', action: 'privacy' }
+      // { id: 9, icon: 'fas fa-bell', label: '通知设置', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)', action: 'notifications' },
+      // { id: 10, icon: 'fas fa-download', label: '下载管理', gradient: 'linear-gradient(135deg, #84fab0, #8fd3f4)', action: 'downloads' },
+      // { id: 11, icon: 'fas fa-shield-alt', label: '隐私与安全', gradient: 'linear-gradient(135deg, #667eea, #764ba2)', action: 'privacy' }
     ]
   }
 ]);

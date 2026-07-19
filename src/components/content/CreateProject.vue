@@ -224,15 +224,34 @@ const handleCoverChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
     try {
+      // 第一次尝试上传
       const reply = await uploadImage(file, 'project');
       const imageUrl = await imageView(reply);
       coverImage.value = imageUrl;
       coverName.value = reply;
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
-      console.error('封面上传失败:', error);
-      alert(`封面上传失败: ${error.message}`);
-      return;
+      console.error('❌ 封面上传失败，尝试重试:', error);
+      
+      // 如果是登录相关错误，提示用户
+      if (error.message?.includes('登录') || error.message?.includes('凭证')) {
+        alert('登录已过期，请重新登录');
+        return;
+      }
+      
+      // 尝试重试一次上传
+      try {
+        console.log('🔄 重新上传封面...');
+        const reply = await uploadImage(file, 'project');
+        const imageUrl = await imageView(reply);
+        coverImage.value = imageUrl;
+        coverName.value = reply;
+        console.log('✅ 封面上传成功:', imageUrl);
+      } catch (retryError) {
+        console.error('❌ 封面重试上传失败:', retryError);
+        alert(`封面上传失败: ${retryError.message}`);
+        return;
+      }
     }
   }
 };
@@ -241,15 +260,34 @@ const handleCoverDrop = async (event) => {
   const file = event.dataTransfer.files[0];
   if (file && file.type.startsWith('image/')) {
     try {
+      // 第一次尝试上传
       const reply = await uploadImage(file, 'project');
       const imageUrl = await imageView(reply);
       coverImage.value = imageUrl;
       coverName.value = reply;
       console.log('封面上传成功:', imageUrl);
     } catch (error) {
-      console.error('封面上传失败:', error);
-      alert(`封面上传失败: ${error.message}`);
-      return;
+      console.error('❌ 封面上传失败，尝试重试:', error);
+      
+      // 如果是登录相关错误，提示用户
+      if (error.message?.includes('登录') || error.message?.includes('凭证')) {
+        alert('登录已过期，请重新登录');
+        return;
+      }
+      
+      // 尝试重试一次上传
+      try {
+        console.log('🔄 重新上传封面...');
+        const reply = await uploadImage(file, 'project');
+        const imageUrl = await imageView(reply);
+        coverImage.value = imageUrl;
+        coverName.value = reply;
+        console.log('✅ 封面上传成功:', imageUrl);
+      } catch (retryError) {
+        console.error('❌ 封面重试上传失败:', retryError);
+        alert(`封面上传失败: ${retryError.message}`);
+        return;
+      }
     }
   }
 };

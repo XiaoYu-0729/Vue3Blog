@@ -33,10 +33,11 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   (response) => response,
   async(error) => {
-    // 保存原始请求配置
     const originalRequest = error.config;
-    // 拦截所有的401令牌验证错误响应
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    
+    // 拦截401且未重试过的请求
+    if (status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
       // 尝试刷新一次token
       try {
@@ -57,9 +58,8 @@ request.interceptors.response.use(
             console.error('退出登录失败:', logoutError);
           }
           return Promise.reject(new Error('登录过期，请重新登录'));
-        } else {
-          return Promise.reject(e.message);
         }
+        return Promise.reject(e);
       }
     }
     // 其他错误，直接返回
@@ -105,9 +105,13 @@ export const uploadImage = async (file, source = 'default') => {
     
     // 提取后端返回的错误信息（500 状态码时 jsonify(e) 的内容）
     let errorMsg = '图片上传失败';
+    
+    // 如果是401错误，让响应拦截器处理token刷新，不要在这里拦截
     if (error.response?.status === 401) {
-      throw error;
-    } else if (error.response?.status === 500 && error.response?.data?.message) {
+      throw error; // 让拦截器处理token刷新
+    }
+    
+    if (error.response?.status === 500 && error.response?.data?.message) {
       errorMsg = error.response.data.message;
     } else if (error.response?.status) {
       // 其他状态码错误
@@ -248,9 +252,13 @@ export const uploadFiles = async (files, source = 'default') => {
     
     // 提取后端返回的错误信息（400 状态码时 jsonify(e) 的内容）
     let errorMsg = '文件上传失败';
+    
+    // 如果是401错误，让响应拦截器处理token刷新，不要在这里拦截
     if (error.response?.status === 401) {
-      throw error;
-    } else if (error.response?.data?.message) {
+      throw error; // 让拦截器处理token刷新
+    }
+    
+    if (error.response?.data?.message) {
       errorMsg = error.response.data.message;
     }  else if (error.response?.status) {
       // 其他状态码错误
@@ -472,15 +480,3 @@ export const cancelCollectDetailPage = async (id) => {
       throw error;
   }
 }
-
-// export default { 
-//     uploadImage, 
-//     imageView, 
-//     revokeImageUrl, 
-//     revokeAllImageUrls, 
-//     uploadFiles, 
-//     contentLengthLimit,
-//     fetchHomeData,
-//     combineData,
-//     getDetailPage
-// };
